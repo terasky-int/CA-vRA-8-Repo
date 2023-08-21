@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="assignEnterpriseRoles" result-type="string" api-version="6.0.0" id="c05083c8-4412-47e5-8639-4a2340052974" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.directory">
+  <param n="searchTerm" t="string"><![CDATA[]]></param>
+  <param n="orgId" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var path = "/csp/gateway/am/api/groups/search?searchTerm=" + searchTerm
+var content = System.getModule("com.ca.vra.restHost").vraRestHostGetOperation(path)
+
+System.warn(content)
+
+if (content.results.length > 1)
+{
+    throw 'Found 2 groups with the same name'
+}
+if (content.results.length == 0)
+{
+    throw 'Could not find group with name ' + searchTerm
+}
+
+var groupId = content.results[0].id
+
+var path = '/csp/gateway/slc/api/v2/orgs/' + orgId + '/services'
+var services = System.getModule("com.ca.vra.restHost").vraRestHostGetOperation(path)
+
+
+for each(var service in services.results)
+{
+    if (service.name == "Service Broker")
+    {
+        for each(var role in service.serviceRoles)
+        {
+            if (role.name == 'catalog:user')
+            {
+                var serviceDefinition = (role.serviceDefinitionLink).split('/')
+                serviceDefinitionId = serviceDefinition[serviceDefinition.length - 1]
+            }
+        }
+    }
+}
+
+var path = '/csp/gateway/am/api/orgs/' + orgId + '/group-roles'
+var json = {"ids":[groupId],"organizationRoleNames":["org_member"],"serviceRoles":[{"serviceDefinitionId":serviceDefinitionId,"serviceRoleNames":["catalog:user"]}]}
+var body = JSON.stringify(json)
+
+System.getModule("com.ca.vra.host").vraPostOperation(path, body)]]></script>
+</dunes-script-module>

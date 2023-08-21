@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getCustomNamingCEbyEndpoint" result-type="ConfigurationElement" api-version="6.0.0" id="9f8e1e76-c9bc-46cc-9f63-f10e09789d21" version="0.0.0" category-name="com.ca.vra.subscriptions">
+  <param n="endpoint" t="string"/>
+  <script encoded="false"><![CDATA[var configs = Server.getConfigurationElementCategoryWithPath('Cloud Automation/Deployments')
+
+for each(var config in configs.allConfigurationElements)
+{
+    if (config.name.toLowerCase().indexOf(endpoint.toLowerCase()) > -1)
+    {
+        return config
+    }
+}]]></script>
+</dunes-script-module>

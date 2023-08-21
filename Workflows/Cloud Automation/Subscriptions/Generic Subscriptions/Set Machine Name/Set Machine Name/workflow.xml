@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item2" object-name="workflow:name=generic" id="a016a603-7937-451a-b80e-1a6d4a6c8287" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Set Machine Name</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inputProperties" type="Properties"/>
+    </input>
+    <output>
+        <param name="resourceNames" type="Array/string"/>
+    </output>
+    <attrib name="customNamingCE" type="ConfigurationElement">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="pathUri" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="deploymentResponse" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="enpointResponse" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="endpoint" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="980.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Set Machine Name</display-name>
+        <script encoded="false">function formatPadding(n) {&#13;
+    return (n&lt;10? '00' : n&lt;100? '0' : '') + n;&#13;
+}&#13;
+&#13;
+customProperties = inputProperties.get("customProperties");&#13;
+var new_name = customProperties.get("machineName")&#13;
+resourceNames = inputProperties.get("resourceNames");&#13;
+&#13;
+for (var i=0; i&lt; resourceNames.length; i++){ &#13;
+    var conf = customNamingCE.getAttributeWithKey(new_name)&#13;
+    if (conf == null) { &#13;
+        customNamingCE.setAttributeWithKey(new_name, 1)&#13;
+    }&#13;
+    customNamingCE.reload()&#13;
+    System.sleep(5)&#13;
+    var currentValue = customNamingCE.getAttributeWithKey(new_name).value&#13;
+    var suffix = formatPadding(currentValue)&#13;
+    resourceNames[i] = new_name + suffix&#13;
+    customNamingCE.setAttributeWithKey(new_name, currentValue+1)&#13;
+}&#13;
+</script>
+        <in-binding>
+            <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+            <bind name="customNamingCE" type="ConfigurationElement" export-name="customNamingCE"/>
+        </in-binding>
+        <out-binding>
+            <bind name="resourceNames" type="Array/string" export-name="resourceNames"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="820.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item3" type="task" comparator="0">
+        <display-name>Get Deployment Endpoint ID</display-name>
+        <script encoded="false">var endpointId = inputProperties.get('endpointId')&#13;
+&#13;
+pathUri = '/iaas/api/cloud-accounts/' + endpointId</script>
+        <in-binding>
+            <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+        </in-binding>
+        <out-binding>
+            <bind name="pathUri" type="string" export-name="pathUri"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="180.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item4" type="task" script-module="com.ca.vra.host/vraGetOperation" comparator="0">
+        <display-name>vraGetOperation</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.ca.vra.host").vraGetOperation(pathUri);
+</script>
+        <in-binding>
+            <bind name="pathUri" type="string" export-name="pathUri">
+                <description></description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="string" export-name="enpointResponse"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="320.0"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item5" type="task" comparator="0">
+        <display-name>Get Deployment Endpoint Name</display-name>
+        <script encoded="false">var response = JSON.parse(enpointResponse)&#13;
+endpoint = response.cloudAccountType&#13;
+&#13;
+</script>
+        <in-binding>
+            <bind name="enpointResponse" type="string" export-name="enpointResponse"/>
+        </in-binding>
+        <out-binding>
+            <bind name="endpoint" type="string" export-name="endpoint"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="460.0"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item1" type="task" script-module="com.ca.vra.subscriptions/getCustomNamingCEbyEndpoint" comparator="0">
+        <display-name>getCustomNamingCEbyEndpoint</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.ca.vra.subscriptions").getCustomNamingCEbyEndpoint(endpoint);
+</script>
+        <in-binding>
+            <bind name="endpoint" type="string" export-name="endpoint">
+                <description></description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="ConfigurationElement" export-name="customNamingCE"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="620.0"/>
+    </workflow-item>
+</ns2:workflow>

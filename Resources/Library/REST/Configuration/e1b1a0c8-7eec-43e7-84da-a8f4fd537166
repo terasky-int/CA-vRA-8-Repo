@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<endpoint nativeId="04139e3b-c088-4b40-bafd-ace4a1773e41" pluginVersion="2.5.0">
+    <properties>
+        <property type="string" name="schema">&lt;com.vmware.o11n.plugin.rest.schema.SchemaRespository&gt;
+  &lt;sources/&gt;
+&lt;/com.vmware.o11n.plugin.rest.schema.SchemaRespository&gt;</property>
+        <property type="string" name="redirectStrategy">defaultRedirect</property>
+        <property type="string" name="proxyAuthenticationType">NONE</property>
+        <property type="integer" name="operationTimeout">60</property>
+        <property type="string" name="proxySessionMode">Shared Session</property>
+        <property type="bool" name="useProxy">false</property>
+        <property type="string" name="url">https://cmdb-piap.corp.amdocs.com:8443/api</property>
+        <property type="bool" name="automaticUrlRedirection">false</property>
+        <property type="bool" name="cleanHttpContextPerRequest">false</property>
+        <property type="string" name="operations">&lt;list&gt;
+  &lt;com.vmware.o11n.plugin.rest.RESTOperation&gt;
+    &lt;id&gt;b1316cda-1925-495c-8fc2-f76350163892&lt;/id&gt;
+    &lt;name&gt;Create New Record&lt;/name&gt;
+    &lt;host&gt;
+      &lt;name&gt;Polaris System&lt;/name&gt;
+      &lt;id&gt;e1b1a0c8-7eec-43e7-84da-a8f4fd537166&lt;/id&gt;
+      &lt;url&gt;https://cmdb-piap.corp.amdocs.com:8443/api&lt;/url&gt;
+      &lt;operations class="tree-map"&gt;
+        &lt;entry&gt;
+          &lt;string&gt;e1b1a0c8-7eec-43e7-84da-a8f4fd537166:adbfbf72-9cc1-4901-a01b-96ed9a3da18a&lt;/string&gt;
+          &lt;com.vmware.o11n.plugin.rest.RESTOperation&gt;
+            &lt;id&gt;adbfbf72-9cc1-4901-a01b-96ed9a3da18a&lt;/id&gt;
+            &lt;name&gt;Update Server Record&lt;/name&gt;
+            &lt;host reference="../../../.."/&gt;
+            &lt;urlTemplate&gt;/arsys/v1.0/entry/AST:ComputerSystem/{requestID}&lt;/urlTemplate&gt;
+            &lt;method&gt;PUT&lt;/method&gt;
+            &lt;inParameters&gt;
+              &lt;string&gt;requestID&lt;/string&gt;
+            &lt;/inParameters&gt;
+            &lt;pathParamsCount&gt;1&lt;/pathParamsCount&gt;
+            &lt;headerParameters/&gt;
+            &lt;defaultContentType&gt;&lt;/defaultContentType&gt;
+            &lt;commonHeaders/&gt;
+            &lt;supportedAcceptHeaderMediaTypes/&gt;
+            &lt;supportedContentTypes/&gt;
+            &lt;mandatoryPathParamNames/&gt;
+            &lt;mandatoryQueryParamNames/&gt;
+            &lt;mandatoryHeaderParamNames/&gt;
+          &lt;/com.vmware.o11n.plugin.rest.RESTOperation&gt;
+        &lt;/entry&gt;
+        &lt;entry&gt;
+          &lt;string&gt;e1b1a0c8-7eec-43e7-84da-a8f4fd537166:b1316cda-1925-495c-8fc2-f76350163892&lt;/string&gt;
+          &lt;com.vmware.o11n.plugin.rest.RESTOperation reference="../../../.."/&gt;
+        &lt;/entry&gt;
+        &lt;entry&gt;
+          &lt;string&gt;e1b1a0c8-7eec-43e7-84da-a8f4fd537166:c798f18b-3b10-4d00-b523-3869ba396e16&lt;/string&gt;
+          &lt;com.vmware.o11n.plugin.rest.RESTOperation&gt;
+            &lt;id&gt;c798f18b-3b10-4d00-b523-3869ba396e16&lt;/id&gt;
+            &lt;name&gt;To generate Authentication token&lt;/name&gt;
+            &lt;host reference="../../../.."/&gt;
+            &lt;urlTemplate&gt;/jwt/login?username=CCOE&amp;amp;password=J6qcXJHrcq!sCMDB&lt;/urlTemplate&gt;
+            &lt;method&gt;POST&lt;/method&gt;
+            &lt;inParameters/&gt;
+            &lt;pathParamsCount&gt;0&lt;/pathParamsCount&gt;
+            &lt;headerParameters/&gt;
+            &lt;defaultContentType&gt;application/x-www-form-urlencoded&lt;/defaultContentType&gt;
+            &lt;commonHeaders/&gt;
+            &lt;supportedAcceptHeaderMediaTypes/&gt;
+            &lt;supportedContentTypes/&gt;
+            &lt;mandatoryPathParamNames/&gt;
+            &lt;mandatoryQueryParamNames/&gt;
+            &lt;mandatoryHeaderParamNames/&gt;
+          &lt;/com.vmware.o11n.plugin.rest.RESTOperation&gt;
+        &lt;/entry&gt;
+        &lt;entry&gt;
+          &lt;string&gt;e1b1a0c8-7eec-43e7-84da-a8f4fd537166:f9f2eac5-3c16-46fb-b4e6-61a6a80d34e5&lt;/string&gt;
+          &lt;com.vmware.o11n.plugin.rest.RESTOperation&gt;
+            &lt;id&gt;f9f2eac5-3c16-46fb-b4e6-61a6a80d34e5&lt;/id&gt;
+            &lt;name&gt;Get server details&lt;/name&gt;
+            &lt;host reference="../../../.."/&gt;
+            &lt;urlTemplate&gt;/arsys/v1.0/entry/AST:ComputerSystem?q=Name={serverName}&lt;/urlTemplate&gt;
+            &lt;method&gt;GET&lt;/method&gt;
+            &lt;inParameters&gt;
+              &lt;string&gt;serverName&lt;/string&gt;
+            &lt;/inParameters&gt;
+            &lt;pathParamsCount&gt;0&lt;/pathParamsCount&gt;
+            &lt;headerParameters/&gt;
+            &lt;defaultContentType&gt;&lt;/defaultContentType&gt;
+            &lt;commonHeaders/&gt;
+            &lt;supportedAcceptHeaderMediaTypes/&gt;
+            &lt;supportedContentTypes/&gt;
+            &lt;mandatoryPathParamNames/&gt;
+            &lt;mandatoryQueryParamNames/&gt;
+            &lt;mandatoryHeaderParamNames/&gt;
+          &lt;/com.vmware.o11n.plugin.rest.RESTOperation&gt;
+        &lt;/entry&gt;
+      &lt;/operations&gt;
+      &lt;authentication class="com.vmware.o11n.plugin.rest.NoneAuthentication"&gt;
+        &lt;type&gt;NONE&lt;/type&gt;
+        &lt;sessionMode&gt;Shared Session&lt;/sessionMode&gt;
+        &lt;isValid&gt;true&lt;/isValid&gt;
+        &lt;validationMessage&gt;&lt;/validationMessage&gt;
+      &lt;/authentication&gt;
+      &lt;connectionTimeout&gt;30&lt;/connectionTimeout&gt;
+      &lt;operationTimeout&gt;60&lt;/operationTimeout&gt;
+      &lt;hostVerification&gt;false&lt;/hostVerification&gt;
+      &lt;proxyPort&gt;-1&lt;/proxyPort&gt;
+      &lt;schemaRepo&gt;
+        &lt;sources/&gt;
+      &lt;/schemaRepo&gt;
+      &lt;cleanHttpContextPerRequest&gt;false&lt;/cleanHttpContextPerRequest&gt;
+      &lt;redirectStrategy&gt;defaultRedirect&lt;/redirectStrategy&gt;
+      &lt;proxyAuthentication class="com.vmware.o11n.plugin.rest.NoneAuthentication" reference="../authentication"/&gt;
+    &lt;/host&gt;
+    &lt;urlTemplate&gt;/arsys/v1.0/entry/AST:ComputerSystem&lt;/urlTemplate&gt;
+    &lt;method&gt;POST&lt;/method&gt;
+    &lt;inParameters/&gt;
+    &lt;pathParamsCount&gt;0&lt;/pathParamsCount&gt;
+    &lt;headerParameters/&gt;
+    &lt;defaultContentType&gt;&lt;/defaultContentType&gt;
+    &lt;commonHeaders/&gt;
+    &lt;supportedAcceptHeaderMediaTypes/&gt;
+    &lt;supportedContentTypes/&gt;
+    &lt;mandatoryPathParamNames/&gt;
+    &lt;mandatoryQueryParamNames/&gt;
+    &lt;mandatoryHeaderParamNames/&gt;
+  &lt;/com.vmware.o11n.plugin.rest.RESTOperation&gt;
+  &lt;com.vmware.o11n.plugin.rest.RESTOperation reference="../com.vmware.o11n.plugin.rest.RESTOperation/host/operations/entry[4]/com.vmware.o11n.plugin.rest.RESTOperation"/&gt;
+  &lt;com.vmware.o11n.plugin.rest.RESTOperation reference="../com.vmware.o11n.plugin.rest.RESTOperation/host/operations/entry[3]/com.vmware.o11n.plugin.rest.RESTOperation"/&gt;
+  &lt;com.vmware.o11n.plugin.rest.RESTOperation reference="../com.vmware.o11n.plugin.rest.RESTOperation/host/operations/entry/com.vmware.o11n.plugin.rest.RESTOperation"/&gt;
+&lt;/list&gt;</property>
+        <property type="bool" name="hostVerification">false</property>
+        <property type="string" name="name">Polaris System</property>
+        <property type="string" name="authenticationType">NONE</property>
+        <property type="string" name="sessionMode">Shared Session</property>
+        <property type="integer" name="connectionTimeout">30</property>
+    </properties>
+</endpoint>

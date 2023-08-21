@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getClustersFromCloudZone" result-type="Array/string" api-version="6.0.0" id="a5277aeb-8adc-41b6-84f4-d113d241ec7e" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.reservations">
+  <param n="cloudZoneName" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var clusters = new Array()
+
+var pathUri = '/iaas/api/zones/'
+var zones = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+zones = JSON.parse(zones)
+for each(var zone in zones.content)
+{
+    if (zone.name.toLowerCase() == cloudZoneName.toLowerCase())
+    {
+        var zoneId = zone.id
+    }
+}
+
+var pathUri = '/iaas/api/zones/' + zoneId + '/computes'
+var computes = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+computes = JSON.parse(computes)
+for each(var compute in computes.content)
+{
+    clusters.push(compute.name)
+}
+
+return clusters]]></script>
+</dunes-script-module>

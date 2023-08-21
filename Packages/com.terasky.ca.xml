@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='03f910e1-49e9-403d-8ac5-5ea5d6cffc3a'&dunesName='Action'&name='getTotalStorageCapacityFromVC'&category='com.ca.vra.reservations']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ResourceElement?id='04139e3b-c088-4b40-bafd-ace4a1773e41'&dunesName='ResourceElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='089490f7-38a6-4e60-b87f-8d7a32901118'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='0e733bd3-75bc-4e5f-bd79-c9330eb53de9'&dunesName='Action'&name='getVraRestHostRefreshToken'&category='com.ca.vra.restHost']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='1248ded0-a99b-4e8c-9400-c9625ef89099'&dunesName='Action'&name='vraGetOperation'&category='amdocs.utilities']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='2bd885d5-6778-4218-ae0e-8daa5f2b8655'&dunesName='Action'&name='getTotalMemoryCapacityFromVC'&category='com.ca.vra.reservations']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='32b85617-0e4d-4811-b422-77e6e9a71d6c'&dunesName='Action'&name='vraPatchOperation'&category='amdocs.utilities']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='3cde3576-f7a0-41aa-b794-5a86af4c4181'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='3fb4fc15-5a21-4d8b-9b6d-761c1fdedfe2'&dunesName='Action'&name='returnMostAvailableCloudZone'&category='com.ca.vra.projects']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='45e350ee-847d-463f-a84d-81a6b8c927b8'&dunesName='Action'&name='returnValidEmailAddress'&category='com.amdocs']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='4b97c8a6-88fa-4dd9-a25d-dfeb7b8fb3b4'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='4e079335-91ee-4b20-901d-f6ed1125e3e9'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='5f04b16b-27e6-43bb-aff6-08d3bb0cb079'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='63823a64-fb44-422c-824d-5cfd1598fc33'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='7a834d98-63d6-4d22-9928-7839a8ffcec0'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='8480808080808080808080808080808082808080013233743790483c0250095dc'&dunesName='Action'&name='validateEmailAddressList'&category='com.vmware.library.mail']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='8963596e-8a61-4fb2-b496-eb4a5f8f8a91'&dunesName='Action'&name='vraRestHostGetOperation'&category='com.ca.vra.restHost']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='8F808080808080808080808080808080B1808080012318760241416446ce5b52f'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='92181718-369a-483d-a98c-9910dc01e8f6'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='9c280a87-39d1-40b0-8748-942c8d198f60'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='9c4dc26d-0a99-4dc7-bebd-d98ac3ce1776'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='a08d73fb-76a9-4505-9627-8f7328e1c115'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='a0b3f303-c916-4578-a757-355d27cdbee2'&dunesName='Action'&name='getVraRestHostBearerToken'&category='com.ca.vra.restHost']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='a5277aeb-8adc-41b6-84f4-d113d241ec7e'&dunesName='Action'&name='getClustersFromCloudZone'&category='com.ca.vra.reservations']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='a5625fbe-dbd4-49c3-aa32-c59defb1b872'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='aaa2239d-e577-4e3b-823f-4216e21c6958'&dunesName='ConfigurationElement']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='af7443ec-4a53-483e-ae80-1a940323a7ef'&dunesName='Action'&name='getReservationParamsFromCE'&category='com.ca.vra.reservations']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='ba5bbb04-01eb-4c6b-877a-6fd035e16e44'&dunesName='Action'&name='syncIdm'&category='com.ca.vra.directory']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='bb312b64-78ce-47be-8324-16eca5b3283b'&dunesName='Action'&name='getTenantNameFromID'&category='amdocs.utilities']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='c05083c8-4412-47e5-8639-4a2340052974'&dunesName='Action'&name='assignEnterpriseRoles'&category='com.ca.vra.directory']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='c414e0c7-2685-42bc-99fc-4946cb80ae3c'&dunesName='Action'&name='vraPostOperation'&category='amdocs.utilities']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Workflow?id='f1ff251f-62d1-4805-8c42-3921bc669aa6'&dunesName='Workflow']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='f9dec981-f36e-4a80-85b0-cca5942ef868'&dunesName='Action'&name='vraDeleteOperation'&category='amdocs.utilities']]></elm>
+<elm src-category='null'><![CDATA[dunes://service.dunes.ch/Action?id='fc16927d-8330-4f4c-902a-de4162430881'&dunesName='Action'&name='getStorageClusterForCloudZone'&category='com.ca.vra.reservations']]></elm>
+<used-plugin name='REST' version='2.5.0' />
+</package>

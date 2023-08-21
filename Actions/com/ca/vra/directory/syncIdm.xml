@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="syncIdm" result-type="string" api-version="6.0.0" id="ba5bbb04-01eb-4c6b-877a-6fd035e16e44" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.directory">
+  <param n="vidmRest" t="REST:RESTHost"><![CDATA[]]></param>
+  <param n="username" t="string"><![CDATA[]]></param>
+  <param n="password" t="SecureString"><![CDATA[]]></param>
+  <param n="directoryName" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var uri = '/SAAS/API/1.0/REST/auth/system/login'
+var body = {
+    'username':username,
+    'password':password,
+    'issueToken':'true'
+}
+
+var request = vidmRest.createRequest("POST", uri, JSON.stringify(body))
+request.setHeader('Content-Type','application/json')
+request.setHeader('accept','application/json')
+var response = request.execute();
+
+var token = JSON.parse(response.contentAsString)['sessionToken']
+var bearer = "Bearer " + token
+
+var uri = '/SAAS/jersey/manager/api/connectormanagement/directoryconfigs'
+var request = vidmRest.createRequest("GET", uri)
+request.setHeader("accept", "application/vnd.vmware.horizon.manager.connector.management.directory.list+json")
+request.setHeader('Authorization', bearer)
+var response = request.execute();
+
+var directories = JSON.parse(response.contentAsString)
+System.warn(directories)
+for each(var dir in directories.items)
+{
+    if (dir.name.toLowerCase() == directoryName.toLowerCase())
+    {
+        var directoryId = dir.directoryId
+    }
+}
+
+var uri = '/SAAS/jersey/manager/api/connectormanagement/directoryconfigs/' + directoryId + '/syncprofile/sync'
+var body = { 'ignoreSafeguards':'false' }
+var request = vidmRest.createRequest("POST", uri, JSON.stringify(body))
+request.setHeader("accept", "application/vnd.vmware.horizon.v1.0+json")
+request.setHeader('Authorization', bearer)
+request.setHeader("content-type", "application/vnd.vmware.horizon.manager.connector.management.directory.sync.profile.sync+json")
+var response = request.execute();
+
+
+if (response.statusCode.toString() == '200')
+{
+    System.warn("Sync kicked off successfully, sleeping for 60 seconds")
+    System.sleep(60 * 1000)
+}
+else
+{
+    throw 'Unable to Sync vIDM Directory'
+}
+
+]]></script>
+</dunes-script-module>

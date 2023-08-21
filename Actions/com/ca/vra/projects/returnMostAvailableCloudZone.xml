@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnMostAvailableCloudZone" result-type="string" api-version="6.0.0" id="3fb4fc15-5a21-4d8b-9b6d-761c1fdedfe2" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.projects">
+  <param n="cloudZones" t="Array/string"><![CDATA[]]></param>
+  <param n="orgId" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var maxStorage = 0;
+var maxMemory = 0;
+var mostAvailableCloudZone = null;
+
+for each(var zoneName in cloudZones)
+{
+    zoneName = zoneName.toLowerCase()
+    var freeStorage = System.getModule("com.ca.vra.reservations").getTotalMemoryCapacityFromVC(zoneName, orgId)
+    var freeMemory = System.getModule("com.ca.vra.reservations").getTotalStorageCapacityFromVC(zoneName, orgId)
+
+    if (freeMemory > maxMemory) 
+    {
+        maxStorage = freeStorage;
+        maxMemory = freeMemory;
+        mostAvailableCloudZone = zoneName;
+    } 
+    else if (freeMemory === maxMemory && freeStorage > maxStorage) 
+    {
+        maxStorage = freeStorage;
+        mostAvailableCloudZone = zoneName;
+    }
+    
+}
+
+System.warn('Found most available zone: ' + mostAvailableCloudZone)
+
+return mostAvailableCloudZone]]></script>
+</dunes-script-module>

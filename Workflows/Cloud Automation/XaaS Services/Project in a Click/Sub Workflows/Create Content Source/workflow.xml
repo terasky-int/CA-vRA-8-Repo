@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="3cde3576-f7a0-41aa-b794-5a86af4c4181" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Create Content Source]]></display-name>
+  <position y="50.0" x="100.0"/>
+  <input>
+    <param name="projectName" type="string"/>
+    <param name="projectId" type="string"/>
+  </input>
+  <output>
+    <param name="newContentSource" type="string"/>
+  </output>
+  <attrib name="pathUri" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="body" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="sleepTime" type="number" read-only="false">
+    <value encoded="n"><![CDATA[30.0]]></value>
+  </attrib>
+  <attrib name="actionResult" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="50.0" x="620.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item2" type="task">
+    <display-name><![CDATA[Define Request]]></display-name>
+    <script encoded="false"><![CDATA[pathUri = '/catalog/api/admin/sources'
+
+var data = {
+    'name': projectName + ' Cloud Templates',
+    'id': projectId,
+    'typeId':'com.vmw.blueprint',
+    'config':
+    {
+        'sourceProjectId': projectId
+    },
+    'global': false
+}
+
+body = JSON.stringify(data)
+
+]]></script>
+    <in-binding>
+      <bind name="projectName" type="string" export-name="projectName"/>
+      <bind name="projectId" type="string" export-name="projectId"/>
+    </in-binding>
+    <out-binding>
+      <bind name="pathUri" type="string" export-name="pathUri"/>
+      <bind name="body" type="string" export-name="body"/>
+      <bind name="newContentSource" type="string"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="160.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item4" type="task" script-module="amdocs.utilities/vraPostOperation">
+    <display-name><![CDATA[Create Content Source]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("amdocs.utilities").vraPostOperation(pathUri,body);
+]]></script>
+    <in-binding>
+      <bind name="pathUri" type="string" export-name="pathUri"/>
+      <bind name="body" type="string" export-name="body"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="actionResult"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="300.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item0" type="task">
+    <display-name><![CDATA[Output Content Source]]></display-name>
+    <script encoded="false"><![CDATA[newContentSource = JSON.stringify(actionResult)]]></script>
+    <in-binding>
+      <bind name="actionResult" type="string" export-name="actionResult"/>
+    </in-binding>
+    <out-binding>
+      <bind name="newContentSource" type="string" export-name="newContentSource"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="440.0"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="vraPostOperation" result-type="string" api-version="6.0.0" id="d9ff9d35-4697-4adf-a0e7-b7adce72f95a" version="0.0.0" category-name="com.ca.vra.host">
+  <param n="pathUri" t="string"><![CDATA[]]></param>
+  <param n="payload" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[for each(var host in Server.findAllForType("VRA:HOST")) 
+{
+    if(host.name.toLowerCase() == "ca-vrahost")
+    {
+        break;
+    }
+}
+var inputHeaders = {
+    "content-type":"application/json"
+}
+
+var restClient = host.createRestClient();
+var request = restClient.createRequest("POST", pathUri, payload);
+var keys = inputHeaders.keys;
+for(var key in keys){
+    request.setHeader(keys[key], inputHeaders.get(keys[key]));
+    System.log("Value for key: "+keys[key] +" is: "+inputHeaders.get(keys[key]));
+}
+var response = restClient.execute(request);
+System.log(pathUri)
+System.log("****Status Code****");
+statusCode = response.statusCode;
+System.log("Status code: " + statusCode);
+
+statusCodeAttribute = statusCode;
+
+statusMessage = response.statusMessage;
+System.log("****Status Message****");
+System.log("Status Message: " + statusMessage);
+
+contentAsString = response.contentAsString;
+System.log("****Content  String****");
+System.log("Content as string: " + contentAsString);
+
+headers = response.getHeaderValues("Access-Control-Allow-Headers");
+System.log("****Headers****");
+for each (var header in headers){
+    System.log(header.toString());
+}
+
+System.log("****All Headers****");
+for each (var header in response.allHeaders){
+    System.log(header.toString());
+}
+
+if ( statusCodeAttribute >= 400 ) {
+    throw "HTTPError: status code: " + statusCodeAttribute;
+}
+
+return contentAsString
+
+]]></script>
+</dunes-script-module>

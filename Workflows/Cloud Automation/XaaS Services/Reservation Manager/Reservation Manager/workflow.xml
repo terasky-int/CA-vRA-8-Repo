@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item2" object-name="workflow:name=generic" id="089490f7-38a6-4e60-b87f-8d7a32901118" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Reservation Manager]]></display-name>
+  <position y="50.0" x="100.0"/>
+  <input>
+    <param name="projectName" type="string"/>
+    <param name="cloudZoneName" type="string"/>
+    <param name="allocateMemory" type="number">
+      <description><![CDATA[memory to allocate]]></description>
+    </param>
+    <param name="allocateStorage" type="number">
+      <description><![CDATA[storage to allocate]]></description>
+    </param>
+    <param name="reservedMemory" type="number"/>
+    <param name="reservedStorage" type="number"/>
+    <param name="allocatedMemory" type="number"/>
+    <param name="allocatedStorage" type="number"/>
+    <param name="availableVcMemory" type="number"/>
+    <param name="availableVcStorage" type="number"/>
+  </input>
+  <attrib name="zoneId" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="projectId" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="pathUri" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="body" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="actionResult" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="50.0" x="720.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item4" type="task">
+    <display-name><![CDATA[Get Zone ID]]></display-name>
+    <script encoded="false"><![CDATA[var pathUri = '/iaas/api/zones'
+var allZones = System.getModule("amdocs.utilities").vraGetOperation(pathUri);
+
+for each(var zone in allZones.content)
+{
+    if (zone.name.toLowerCase() == cloudZoneName.toLowerCase())
+    {
+        zoneId = zone.id
+    }
+}]]></script>
+    <in-binding>
+      <bind name="cloudZoneName" type="string" export-name="cloudZoneName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="zoneId" type="string" export-name="zoneId"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="320.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item1" type="task">
+    <display-name><![CDATA[Get Project ID]]></display-name>
+    <script encoded="false"><![CDATA[var pathUri = '/iaas/api/projects'
+var allProjeccts = System.getModule("amdocs.utilities").vraGetOperation(pathUri);
+
+for each(var project in allProjeccts.content)
+{
+    if (project.name.toLowerCase() == projectName.toLowerCase())
+    {
+        projectId = project.id
+    }
+}
+]]></script>
+    <in-binding>
+      <bind name="projectName" type="string" export-name="projectName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="projectId" type="string" export-name="projectId"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="200.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item0" type="task" script-module="amdocs.utilities/vraPatchOperation">
+    <display-name><![CDATA[Update Project Zone Provisioning ]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("amdocs.utilities").vraPatchOperation(pathUri, body);
+]]></script>
+    <in-binding>
+      <bind name="pathUri" type="string" export-name="pathUri"/>
+      <bind name="body" type="string" export-name="body"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="actionResult"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="580.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item3" type="task">
+    <display-name><![CDATA[Prepare Request]]></display-name>
+    <script encoded="false"><![CDATA[pathUri = '/iaas/api/projects/' + projectId
+var projectObject = System.getModule("amdocs.utilities").vraGetOperation(pathUri)
+
+for each(var zone in projectObject.zones)
+{
+    if (zone.zoneId == zoneId)
+    {
+        var currentAllocatedStorage = zone.storageLimitGB
+        var currentAllocatedMemory = zone.memoryLimitMB
+    }
+}
+
+var zoneAssignmentArray = new Array()
+var zoneAssignmentProperties = new Properties()
+
+if (allocateStorage) 
+{
+    zoneAssignmentProperties['storageLimitGB'] = allocateStorage
+}
+else 
+{
+    zoneAssignmentProperties['storageLimitGB'] = currentAllocatedStorage
+}
+if (allocateMemory)
+{
+    zoneAssignmentProperties['memoryLimitMB'] = allocateMemory * 1024
+}
+else
+{
+    zoneAssignmentProperties['memoryLimitMB'] = currentAllocatedMemory
+}
+
+zoneAssignmentProperties['zoneId'] = zoneId
+zoneAssignmentArray.push(zoneAssignmentProperties)
+
+var bodyProperty = new Properties()
+bodyProperty['zoneAssignmentConfigurations'] = zoneAssignmentArray
+
+body = JSON.stringify(bodyProperty)]]></script>
+    <in-binding>
+      <bind name="zoneId" type="string" export-name="zoneId"/>
+      <bind name="projectId" type="string" export-name="projectId"/>
+      <bind name="allocateStorage" type="number" export-name="allocateStorage"/>
+      <bind name="allocateMemory" type="number" export-name="allocateMemory"/>
+    </in-binding>
+    <out-binding>
+      <bind name="pathUri" type="string" export-name="pathUri"/>
+      <bind name="body" type="string" export-name="body"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="460.0"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

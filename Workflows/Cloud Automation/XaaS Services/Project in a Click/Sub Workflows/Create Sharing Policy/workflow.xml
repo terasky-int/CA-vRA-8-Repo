@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item3" object-name="workflow:name=generic" id="63823a64-fb44-422c-824d-5cfd1598fc33" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Create Sharing Policy]]></display-name>
+  <position y="50.0" x="100.0"/>
+  <input>
+    <param name="contentSources" type="Array/string"/>
+    <param name="orgId" type="string"/>
+    <param name="projectId" type="string"/>
+    <param name="policyName" type="string"/>
+  </input>
+  <output>
+    <param name="policyId" type="string"/>
+  </output>
+  <attrib name="pathUri" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="body" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="contentSourceIds" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="actionResult" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="50.0" x="720.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item4" type="task" script-module="amdocs.utilities/vraPostOperation">
+    <display-name><![CDATA[vraPostOperation]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("amdocs.utilities").vraPostOperation(pathUri, body);
+]]></script>
+    <in-binding>
+      <bind name="pathUri" type="string" export-name="pathUri"/>
+      <bind name="body" type="string" export-name="body"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="actionResult"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="420.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item1" type="task">
+    <display-name><![CDATA[Prepare Body]]></display-name>
+    <script encoded="false"><![CDATA[pathUri = '/policy/api/policies'
+
+var definition = new Properties()
+definition.entitledUsers = new Array()
+var entitledObject = new Properties()
+entitledObject.userType = "USER"
+entitledObject.items = new Array()
+entitledObject.principals = new Array()
+var principal = new Properties()
+principal.type = "PROJECT"
+entitledObject.principals.push(principal)
+
+for each(var contentSourceId in contentSourceIds)
+{
+    var item = new Properties()
+    item.id = contentSourceId
+    item.type = "CATALOG_SOURCE_IDENTIFIER"
+    entitledObject.items.push(item)
+}
+
+definition.entitledUsers.push(entitledObject)
+
+var data = {
+  "definition": definition,
+  "description": "Created with Project in a Click",
+  "enforcementType": "HARD",
+  "name": policyName,
+  "orgId": orgId,
+  "projectId": projectId,
+  "typeId": "com.vmware.policy.catalog.entitlement"
+}
+
+body = JSON.stringify(data)]]></script>
+    <in-binding>
+      <bind name="orgId" type="string" export-name="orgId"/>
+      <bind name="projectId" type="string" export-name="projectId"/>
+      <bind name="contentSourceIds" type="Array/string" export-name="contentSourceIds"/>
+      <bind name="policyName" type="string" export-name="policyName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="pathUri" type="string" export-name="pathUri"/>
+      <bind name="body" type="string" export-name="body"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="300.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item2" type="task">
+    <display-name><![CDATA[Get Content Sources IDs]]></display-name>
+    <script encoded="false"><![CDATA[contentSourceIds = new Array()
+
+var pathUri = '/catalog/api/admin/sources'
+var sources = System.getModule("amdocs.utilities").vraGetOperation(pathUri)
+
+for each(var contentSource in contentSources)
+{
+    for each(var source in sources.content)
+    {
+        if (contentSource.toLowerCase() == source.name.toLowerCase())
+        {
+            contentSourceIds.push(source.id)
+        }
+    }
+}
+
+]]></script>
+    <in-binding>
+      <bind name="contentSources" type="Array/string" export-name="contentSources"/>
+    </in-binding>
+    <out-binding>
+      <bind name="contentSourceIds" type="Array/string" export-name="contentSourceIds"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="160.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item0" type="task">
+    <display-name><![CDATA[Get Result]]></display-name>
+    <script encoded="false"><![CDATA[if (actionResult.statusCode)
+{
+    if (actionResult.statusCode.toString().charAt(0) != '2')
+    {
+        throw 'Failed to create Sharing Policy'
+    }
+}
+
+policyId = actionResult.id]]></script>
+    <in-binding>
+      <bind name="actionResult" type="string" export-name="actionResult"/>
+    </in-binding>
+    <out-binding>
+      <bind name="policyId" type="string" export-name="policyId"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="560.0"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

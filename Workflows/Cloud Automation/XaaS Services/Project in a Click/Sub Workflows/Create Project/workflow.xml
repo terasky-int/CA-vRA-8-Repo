@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item2" object-name="workflow:name=generic" id="f1ff251f-62d1-4805-8c42-3921bc669aa6" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Create Project]]></display-name>
+  <position y="50.0" x="40.0"/>
+  <input>
+    <param name="administrators" type="Array/string"/>
+    <param name="supervisors" type="Array/string"/>
+    <param name="viewers" type="Array/string"/>
+    <param name="members" type="Array/string"/>
+    <param name="projectName" type="string"/>
+    <param name="projectProperties" type="Properties"/>
+    <param name="zones" type="Array/string"/>
+  </input>
+  <output>
+    <param name="newProjectId" type="string"/>
+  </output>
+  <attrib name="body" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="administratorsArray" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="supervisorsArray" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="membersArray" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="viewersArray" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="zonesArray" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="zoneIds" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="pathUri" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="newProject" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="50.0" x="720.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item4" type="task">
+    <display-name><![CDATA[Prepare Request]]></display-name>
+    <script encoded="false"><![CDATA[var data = {
+  "operationTimeout": 120,
+  "description": "string",
+  "constraints": {},
+  "customProperties": projectProperties,
+  "sharedResources": true,
+  "zoneAssignmentConfigurations": zonesArray,
+  "name": projectName,
+  "placementPolicy": "DEFAULT",
+  "administrators": administratorsArray,
+  "supervisors": supervisorsArray,
+  "members": membersArray,
+  "viewers": viewersArray
+}
+
+body = JSON.stringify(data)
+
+pathUri = '/iaas/api/projects']]></script>
+    <in-binding>
+      <bind name="administratorsArray" type="Array/Properties" export-name="administratorsArray"/>
+      <bind name="supervisorsArray" type="Array/Properties" export-name="supervisorsArray"/>
+      <bind name="membersArray" type="Array/Properties" export-name="membersArray"/>
+      <bind name="viewersArray" type="Array/Properties" export-name="viewersArray"/>
+      <bind name="projectName" type="string" export-name="projectName"/>
+      <bind name="zonesArray" type="Array/Properties" export-name="zonesArray"/>
+      <bind name="projectProperties" type="Properties" export-name="projectProperties"/>
+    </in-binding>
+    <out-binding>
+      <bind name="body" type="string" export-name="body"/>
+      <bind name="pathUri" type="string" export-name="pathUri"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="340.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item3" type="task">
+    <display-name><![CDATA[Define Zones]]></display-name>
+    <script encoded="false"><![CDATA[var pathUri = '/iaas/api/zones'
+var allZones = System.getModule("amdocs.utilities").vraGetOperation(pathUri);
+var zoneIds = new Array()
+zonesArray = new Array()
+
+for each(var zone in allZones.content)
+{
+    for each(var zoneName in zones)
+    {
+        System.warn(zoneName)
+        if (zoneName)
+        {
+            if (zone.name.toLowerCase() == zoneName.toLowerCase())
+            {
+                zoneIds.push(zone.id)
+            }
+        }
+    }
+}
+
+for each(var zoneId in zoneIds)
+{
+    zonesArray.push({
+      "storageLimitGB": 1,
+      "cpuLimit": 1,
+      "memoryLimitMB": 4096,
+      "zoneId": zoneId,
+      "maxNumberInstances": 0,
+      "priority": 1
+    })
+}
+]]></script>
+    <in-binding>
+      <bind name="zones" type="Array/string" export-name="zones"/>
+    </in-binding>
+    <out-binding>
+      <bind name="zonesArray" type="Array/Properties" export-name="zonesArray"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="100.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item1" type="task">
+    <display-name><![CDATA[Define Groups]]></display-name>
+    <script encoded="false"><![CDATA[administratorsArray = new Array()
+membersArray = new Array()
+supervisorsArray = new Array()
+viewersArray = new Array()
+
+if (administrators)
+{
+    for each(var administrator in administrators)
+    {
+        var props = new Properties()
+        props.put("email", administrator)
+        props.put('type', 'group')
+        administratorsArray.push(props)
+    }
+}
+
+if (members)
+{
+    for each(var member in members)
+    {
+        var props = new Properties()
+        props.put("email", member)
+        props.put('type', 'group')
+        membersArray.push(props)
+    }
+}
+
+if (supervisors)
+{
+    for each(var supervisor in supervisors)
+    {
+        var props = new Properties()
+        props.put("email", supervisor)
+        props.put('type', 'group')
+        supervisorsArray.push(props)
+    }
+}
+
+if (viewers)
+{
+    for each(var viewer in viewers)
+    {
+        var props = new Properties()
+        props.put("email", viewer)
+        props.put('type', 'group')
+        viewersArray.push(props)
+    }
+}
+]]></script>
+    <in-binding>
+      <bind name="administrators" type="Array/string" export-name="administrators"/>
+      <bind name="viewers" type="Array/string" export-name="viewers"/>
+      <bind name="supervisors" type="Array/string" export-name="supervisors"/>
+      <bind name="members" type="Array/string" export-name="members"/>
+    </in-binding>
+    <out-binding>
+      <bind name="administratorsArray" type="Array/Properties" export-name="administratorsArray"/>
+      <bind name="membersArray" type="Array/Properties" export-name="membersArray"/>
+      <bind name="supervisorsArray" type="Array/Properties" export-name="supervisorsArray"/>
+      <bind name="viewersArray" type="Array/Properties" export-name="viewersArray"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="220.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item5" type="task" script-module="amdocs.utilities/vraPostOperation">
+    <display-name><![CDATA[vraPostOperation]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("amdocs.utilities").vraPostOperation(pathUri, body);
+]]></script>
+    <in-binding>
+      <bind name="pathUri" type="string" export-name="pathUri"/>
+      <bind name="body" type="string" export-name="body"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="newProject"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="460.0"/>
+  </workflow-item>
+  <workflow-item name="item5" out-name="item0" type="task">
+    <display-name><![CDATA[Output]]></display-name>
+    <script encoded="false"><![CDATA[if (newProject.statusCode)
+{
+    if (newProject.statusCode.toString().charAt(0) != '2')
+    {
+        throw 'Failed to create Project'
+    }
+}
+
+newProjectId = newProject.id
+
+System.warn('New Project ID is: ' + newProjectId)
+
+]]></script>
+    <in-binding>
+      <bind name="newProject" type="string" export-name="newProject"/>
+    </in-binding>
+    <out-binding>
+      <bind name="newProjectId" type="string" export-name="newProjectId"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="580.0"/>
+  </workflow-item>
+  <presentation/>
+</workflow>

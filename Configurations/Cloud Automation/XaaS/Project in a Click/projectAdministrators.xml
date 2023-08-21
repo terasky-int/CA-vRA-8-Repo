@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="a5625fbe-dbd4-49c3-aa32-c59defb1b872" version="0.0.0">
+  <display-name><![CDATA[projectAdministrators]]></display-name>
+  <atts>
+    <att name="DCCCTOVRAAdministrators" type="AD:UserGroup" read-only="false"/>
+    <att name="ITCESUPPORT" type="AD:UserGroup" read-only="false"/>
+  </atts>
+</config-element>

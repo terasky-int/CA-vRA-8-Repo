@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="vraRestHostGetOperation" result-type="string" api-version="6.0.0" id="8963596e-8a61-4fb2-b496-eb4a5f8f8a91" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.restHost">
+  <param n="pathUri" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var vraHosts = Server.findAllForType('REST:RESTHOST')
+
+for each(var vraHost in vraHosts)
+{
+    if (vraHost.name.toLowerCase() == 'vra host')
+    {
+        var restClient = vraHost
+    }
+}
+System.log(restClient.name)
+var inputHeaders = {'Accept':'application/json'}
+
+//var restClient = host.createRestClient();
+var restRequest = restClient.createRequest("GET", pathUri, null);
+var keys = inputHeaders.keys;
+for(var key in keys){
+    restRequest.setHeader(keys[key], inputHeaders.get(keys[key]));
+    System.log("Value for key: "+keys[key] +" is: "+inputHeaders.get(keys[key]));
+}
+var vraBearerToken = System.getModule("com.ca.vra.restHost").getVraRestHostBearerToken()
+
+restRequest.setHeader("Authorization", "Bearer " + vraBearerToken)
+var response = restRequest.execute();
+
+System.log("****Status Code****");
+statusCode = response.statusCode;
+System.log("Status code: " + statusCode);
+
+statusCodeAttribute = statusCode;
+
+statusMessage = response.statusMessage;
+System.log("****Status Message****");
+System.log("Status Message: " + statusMessage);
+
+contentAsString = response.contentAsString;
+System.log("****Content  String****");
+System.log("Content as string: " + contentAsString);
+
+headers = response.getHeaderValues("Access-Control-Allow-Headers");
+System.log("****Headers****");
+for each (var header in headers){
+	System.log(header.toString());
+}
+
+System.log("****All Headers****");
+for each (var header in response.allHeaders){
+	System.log(header.toString());
+}
+
+return JSON.parse(response.contentAsString) 
+]]></script>
+</dunes-script-module>

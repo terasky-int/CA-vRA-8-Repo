@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="308f99ce-c93f-41d2-b981-3f68797ffcc3" version="0.0.0">
+  <display-name><![CDATA[vRA Environment]]></display-name>
+  <atts>
+    <att name="username" type="string" read-only="false">
+      <value encoded="n"><![CDATA[vradmin]]></value>
+    </att>
+    <att name="password" type="SecureString" read-only="false"/>
+    <att name="domain" type="string" read-only="false">
+      <value encoded="n"><![CDATA[terasky.local]]></value>
+    </att>
+    <att name="domainUsername" type="string" read-only="false">
+      <value encoded="n"><![CDATA[cavra]]></value>
+    </att>
+    <att name="domainPassword" type="SecureString" read-only="false">
+      <value encoded="n"><![CDATA[__NULL__]]></value>
+    </att>
+  </atts>
+</config-element>

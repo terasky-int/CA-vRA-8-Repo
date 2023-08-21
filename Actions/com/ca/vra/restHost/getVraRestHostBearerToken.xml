@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVraRestHostBearerToken" result-type="string" api-version="6.0.0" id="a0b3f303-c916-4578-a757-355d27cdbee2" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.restHost">
+  <script encoded="false"><![CDATA[//validate vra rest host
+var restHosts = RESTHostManager.getHosts()
+for each (var hostID in restHosts){
+    var host = RESTHostManager.getHost(hostID)
+    if (host.name.toLowerCase() == "vra host"){
+        var vraRestHost = host;
+    }
+}
+
+
+var refreshToken = System.getModule("com.ca.vra.restHost").getVraRestHostRefreshToken()
+
+//Get bearer token
+var pathUri = '/iaas/api/login'
+
+var body = {
+    "refreshToken": refreshToken
+}
+
+var restRequest = vraRestHost.createRequest("POST", pathUri, JSON.stringify(body));
+restRequest.setHeader("Content-Type", "application/json");
+var restResponse = restRequest.execute();
+var content = JSON.parse(restResponse.contentAsString);
+var bearerVraToken = content.token
+
+return bearerVraToken
+
+]]></script>
+</dunes-script-module>

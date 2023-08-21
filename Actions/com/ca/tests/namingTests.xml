@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="namingTests" result-type="string" api-version="6.0.0" id="9d8ae834-f00b-4eed-9dbf-390155fd8d48" version="0.0.0" category-name="com.ca.tests">
+  <script encoded="false"><![CDATA[var configs = Server.getConfigurationElementCategoryWithPath('Cloud Automation/Deployments')
+
+for each(var config in configs.allConfigurationElements)
+{
+    
+}]]></script>
+</dunes-script-module>

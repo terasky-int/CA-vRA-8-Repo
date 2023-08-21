@@ -1,0 +1,814 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item1" object-name="workflow:name=generic" id="92181718-369a-483d-a98c-9910dc01e8f6" version="0.1.0" api-version="6.0.0" allowed-operations="vfe" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Project in a Click]]></display-name>
+  <error-handler name="item27">
+    <position y="220.0" x="60.0"/>
+  </error-handler>
+  <position y="50.0" x="40.0"/>
+  <input>
+    <param name="projectName" type="string"/>
+    <param name="administrators" type="Array/AD:UserGroup"/>
+    <param name="members" type="Array/AD:UserGroup"/>
+    <param name="projectPrefix" type="string"/>
+    <param name="projectOwner" type="string"/>
+    <param name="cloudZoneName1_1" type="string"/>
+    <param name="czSelectionType" type="string"/>
+    <param name="requestedBy" type="string"/>
+    <param name="cloudZoneName1_2" type="string"/>
+    <param name="cloudZoneName2_1" type="string"/>
+    <param name="cloudZoneName2_2" type="string"/>
+    <param name="cloudAccountLocation_1" type="string"/>
+    <param name="cloudAccountLocation_2" type="string"/>
+    <param name="purpose1_1" type="string"/>
+    <param name="purpose1_2" type="string"/>
+    <param name="purpose2_2" type="string"/>
+    <param name="purpose2_1" type="string"/>
+    <param name="supportEmail" type="string"/>
+  </input>
+  <attrib name="projectExistsCmdb" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <attrib name="projectProperties" type="Properties" read-only="false">
+    <value encoded="n"><![CDATA[{}]]></value>
+  </attrib>
+  <attrib name="contentSources" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="orgId" type="string" read-only="false">
+    <value encoded="n"><![CDATA[86f992b1-d1cb-4109-b79b-9bba41aac73b]]></value>
+  </attrib>
+  <attrib name="projectId" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="policyName" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="contentSourcesCE" type="ConfigurationElement" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='aaa2239d-e577-4e3b-823f-4216e21c6958'&dunesName='ConfigurationElement']]></value>
+  </attrib>
+  <attrib name="zones" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="zonesObjects" type="Array/Properties" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="mostAvailableCloudZone" type="Properties" read-only="false">
+    <value encoded="n"><![CDATA[{}]]></value>
+  </attrib>
+  <attrib name="wfError" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="newProjectId" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="mailContent" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="addressList" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="mailSubject" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="tenant" type="string" read-only="false">
+    <value encoded="n"><![CDATA[UAT]]></value>
+  </attrib>
+  <attrib name="deleteProjectPathUri" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="deletePolicyPathUri" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="policyId" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="removeCloudZonesPathUri" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="removeCloudZonesBody" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="projectAdministrators" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="projectMembers" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="projectAdminsCE" type="ConfigurationElement" read-only="false">
+    <value encoded="n"><![CDATA[dunes://service.dunes.ch/ConfigurationElement?id='a5625fbe-dbd4-49c3-aa32-c59defb1b872'&dunesName='ConfigurationElement']]></value>
+  </attrib>
+  <attrib name="newContentSource" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="availableCloudZones1_1" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="availableCloudZones1_2" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="availableCloudZones2_1" type="Array/string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="availableCloudZones2_2" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="newContentSourceId" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="deleteContentSourcePathUri" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="groupsToSync" type="Array/AD:UserGroup" read-only="false">
+    <value encoded="n"><![CDATA[[]]]></value>
+  </attrib>
+  <attrib name="syncResult" type="boolean" read-only="false">
+    <value encoded="n"><![CDATA[false]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="50.0" x="1400.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item3" type="link" linked-workflow-id="a08d73fb-76a9-4505-9627-8f7328e1c115">
+    <display-name><![CDATA[Check If Project Exist]]></display-name>
+    <in-binding>
+      <bind name="projectName" type="string" export-name="projectName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="projectExists" type="boolean" export-name="projectExistsCmdb"/>
+    </out-binding>
+    <description><![CDATA[ ]]></description>
+    <position y="60.0" x="160.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item4" type="custom-condition" alt-out-name="item5">
+    <display-name><![CDATA[Is in CMDB?]]></display-name>
+    <script encoded="false"><![CDATA[return projectExistsCmdb]]></script>
+    <in-binding>
+      <bind name="projectExistsCmdb" type="boolean" export-name="projectExistsCmdb"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="50.0" x="280.0"/>
+  </workflow-item>
+  <workflow-item name="item4" throw-bind-name="wfError" type="end" end-mode="1">
+    <in-binding/>
+    <position y="130.0" x="320.0"/>
+  </workflow-item>
+  <workflow-item name="item5" out-name="item16" type="task">
+    <display-name><![CDATA[Set Groups]]></display-name>
+    <script encoded="false"><![CDATA[groupsToSync = new Array()
+projectAdministrators = new Array()
+projectMembers = new Array()
+
+for each(var group in projectAdminsCE.attributes)
+{
+    var groupName = System.getModule("com.amdocs").returnValidEmailAddress(group.value.getAttribute("mail"))
+    projectAdministrators.push(groupName)
+    groupsToSync.push(group.value)
+}
+
+for each(var adminGroup in administrators)
+{
+    var groupName = System.getModule("com.amdocs").returnValidEmailAddress(adminGroup.getAttribute("mail"))
+    projectAdministrators.push(groupName)
+    groupsToSync.push(adminGroup)
+}
+
+for each(var memberGroup in members)
+{
+    var groupName = System.getModule("com.amdocs").returnValidEmailAddress(memberGroup.getAttribute("mail"))
+    projectMembers.push(groupName)
+    groupsToSync.push(memberGroup)
+}
+
+]]></script>
+    <in-binding>
+      <bind name="administrators" type="Array/AD:UserGroup" export-name="administrators"/>
+      <bind name="members" type="Array/AD:UserGroup" export-name="members"/>
+      <bind name="projectAdminsCE" type="ConfigurationElement" export-name="projectAdminsCE"/>
+    </in-binding>
+    <out-binding>
+      <bind name="projectAdministrators" type="Array/string" export-name="projectAdministrators"/>
+      <bind name="projectMembers" type="Array/string" export-name="projectMembers"/>
+      <bind name="groupsToSync" type="Array/AD:UserGroup" export-name="groupsToSync"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="400.0"/>
+  </workflow-item>
+  <workflow-item name="item6" out-name="item8" type="link" linked-workflow-id="9c280a87-39d1-40b0-8748-942c8d198f60">
+    <display-name><![CDATA[Add AD Group to vRA Directory]]></display-name>
+    <in-binding>
+      <bind name="dnsGroups" type="Array/AD:UserGroup" export-name="groupsToSync"/>
+      <bind name="organizationId" type="string" export-name="orgId"/>
+    </in-binding>
+    <out-binding>
+      <bind name="result" type="boolean" export-name="syncResult"/>
+    </out-binding>
+    <description><![CDATA[ ]]></description>
+    <position y="60.0" x="760.0"/>
+  </workflow-item>
+  <workflow-item name="item8" out-name="item9" type="custom-condition" alt-out-name="item11">
+    <display-name><![CDATA[Groups Added in vRA Directories]]></display-name>
+    <script encoded="false"><![CDATA[return true;]]></script>
+    <in-binding>
+      <bind name="syncResult" type="boolean" export-name="syncResult"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="50.0" x="900.0"/>
+  </workflow-item>
+  <workflow-item name="item9" out-name="item10" type="task">
+    <display-name><![CDATA[Set Project Properties]]></display-name>
+    <script encoded="false"><![CDATA[projectProperties = new Properties();
+
+projectProperties.put("project-prefix",projectPrefix.toLowerCase())
+projectProperties.put("ProjectOwner",projectOwner)
+projectProperties.put("support_email",supportEmail)
+projectProperties.put("ProjectName",projectName)
+projectProperties.put("IDM","")
+projectProperties.put("Backup","true")
+projectProperties.put("Monitoring","true")
+projectProperties.put("SUPPORTPRORITY","TIER 2")
+projectProperties.put("ENVIRONMENT","Development/Sandbox")
+]]></script>
+    <in-binding>
+      <bind name="projectPrefix" type="string" export-name="projectPrefix"/>
+      <bind name="projectName" type="string" export-name="projectName"/>
+      <bind name="projectOwner" type="string" export-name="projectOwner"/>
+      <bind name="supportEmail" type="string" export-name="supportEmail"/>
+    </in-binding>
+    <out-binding>
+      <bind name="projectProperties" type="Properties" export-name="projectProperties"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="1040.0"/>
+  </workflow-item>
+  <workflow-item name="item10" out-name="item34" type="link" linked-workflow-id="f1ff251f-62d1-4805-8c42-3921bc669aa6">
+    <display-name><![CDATA[Create Project]]></display-name>
+    <in-binding>
+      <bind name="administrators" type="Array/string" export-name="projectAdministrators"/>
+      <bind name="supervisors" type="Array/string" export-name=""/>
+      <bind name="viewers" type="Array/string" export-name=""/>
+      <bind name="members" type="Array/string" export-name="projectMembers"/>
+      <bind name="projectName" type="string" export-name="projectName"/>
+      <bind name="projectProperties" type="Properties" export-name="projectProperties"/>
+      <bind name="zones" type="Array/string" export-name="zones"/>
+    </in-binding>
+    <out-binding>
+      <bind name="newProjectId" type="string" export-name="newProjectId"/>
+    </out-binding>
+    <description><![CDATA[ ]]></description>
+    <position y="60.0" x="1180.0"/>
+  </workflow-item>
+  <workflow-item name="item11" throw-bind-name="wfError" type="end" end-mode="1">
+    <in-binding/>
+    <position y="130.0" x="940.0"/>
+  </workflow-item>
+  <workflow-item name="item12" out-name="item6" type="task">
+    <display-name><![CDATA[Set Cloud Zones]]></display-name>
+    <script encoded="false"><![CDATA[zones = new Array()
+
+zones.push(cloudZoneName1_1)
+zones.push(cloudZoneName1_2)
+zones.push(cloudZoneName2_1)
+zones.push(cloudZoneName2_1)]]></script>
+    <in-binding>
+      <bind name="cloudZoneName1_1" type="string" export-name="cloudZoneName1_1"/>
+      <bind name="cloudZoneName1_2" type="string" export-name="cloudZoneName1_2"/>
+      <bind name="cloudZoneName2_1" type="string" export-name="cloudZoneName2_1"/>
+      <bind name="cloudZoneName2_2" type="string" export-name="cloudZoneName2_2"/>
+    </in-binding>
+    <out-binding>
+      <bind name="zones" type="Array/string" export-name="zones"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="640.0"/>
+  </workflow-item>
+  <workflow-item name="item13" out-name="item14" type="task">
+    <display-name><![CDATA[ Define Sharing Policy]]></display-name>
+    <script encoded="false"><![CDATA[var contentSource = JSON.parse(newContentSource)
+
+policyName = projectName + "_Sharing_Policy"
+
+contentSources = new Array()
+
+for each(var content in contentSourcesCE.attributes)
+{
+    contentSources.push(content.name)
+}
+
+//Adding Newly created content source
+contentSources.push(contentSource.name)
+
+if (newContentSource.id) newContentSourceId = contentSource.id]]></script>
+    <in-binding>
+      <bind name="projectName" type="string" export-name="projectName"/>
+      <bind name="contentSourcesCE" type="ConfigurationElement" export-name="contentSourcesCE"/>
+      <bind name="newContentSource" type="string" export-name="newContentSource"/>
+    </in-binding>
+    <out-binding>
+      <bind name="policyName" type="string" export-name="policyName"/>
+      <bind name="contentSources" type="Array/string" export-name="contentSources"/>
+      <bind name="newContentSourceId" type="string" export-name="newContentSourceId"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="250.0" x="1180.0"/>
+  </workflow-item>
+  <workflow-item name="item14" out-name="item24" type="link" linked-workflow-id="63823a64-fb44-422c-824d-5cfd1598fc33">
+    <display-name><![CDATA[Create Sharing Policy]]></display-name>
+    <in-binding>
+      <bind name="contentSources" type="Array/string" export-name="contentSources"/>
+      <bind name="orgId" type="string" export-name="orgId"/>
+      <bind name="projectId" type="string" export-name="newProjectId"/>
+      <bind name="policyName" type="string" export-name="policyName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="policyId" type="string" export-name="policyId"/>
+    </out-binding>
+    <description><![CDATA[ ]]></description>
+    <position y="250.0" x="1360.0"/>
+  </workflow-item>
+  <workflow-item name="item16" out-name="item12" type="custom-condition" alt-out-name="item17">
+    <display-name><![CDATA[Cloud Zone Selection Type]]></display-name>
+    <script encoded="false"><![CDATA[if (czSelectionType == 'manual')
+{
+    return true
+}
+
+return false]]></script>
+    <in-binding>
+      <bind name="czSelectionType" type="string" export-name="czSelectionType"/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="50.0" x="520.0"/>
+  </workflow-item>
+  <workflow-item name="item17" out-name="item18" type="task">
+    <display-name><![CDATA[Get Cloud Account Cloud Zones with Purpose]]></display-name>
+    <script encoded="false"><![CDATA[availableCloudZones1_1 = new Array()
+availableCloudZones1_2 = new Array()
+availableCloudZones2_1 = new Array()
+availableCloudZones2_2 = new Array()
+
+var pathUri = '/iaas/api/cloud-accounts'
+var cloudAccounts = System.getModule("amdocs.utilities").vraGetOperation(pathUri)
+
+for each(var cloudAccount in cloudAccounts.content)
+{
+    for each (var cloudAccountTag in cloudAccount.tags)
+    {
+        if (cloudAccountTag.key == 'location')
+        {
+            if (cloudAccountTag.value == cloudAccountLocation_1)
+            {
+                var cloudAccountId_1 = cloudAccount.id
+            }
+            if (cloudAccountTag.value == cloudAccountLocation_2)
+            {
+                var cloudAccountId_2 = cloudAccount.id
+            }
+        }
+    }
+}
+
+var pathUri = '/iaas/api/zones'
+var cloudZones = System.getModule("amdocs.utilities").vraGetOperation(pathUri)
+
+if (cloudAccountLocation_1)
+{
+    for each(var cloudZone in cloudZones.content)
+    {
+        if (cloudZone.cloudAccountId == cloudAccountId_1)
+        {
+            for each(var cloudZoneTag in cloudZone.tags)
+            {
+                if (cloudZoneTag.key == 'purpose')
+                {
+                    if (cloudZoneTag.value == purpose1_1)
+                    {
+                        availableCloudZones1_1.push(cloudZone.name)
+                    }
+                    if (cloudZoneTag.value == purpose1_2)
+                    {
+                        availableCloudZones1_2.push(cloudZone.name)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+if (cloudAccountLocation_2)
+{
+    for each(var cloudZone in cloudZones.content)
+    {
+        if (cloudZone.cloudAccountId == cloudAccountId_2)
+        {
+            for each(var cloudZoneTag in cloudZone.tags)
+            {
+                if (cloudZoneTag.key == 'purpose')
+                {
+                    if (cloudZoneTag.value == purpose2_1)
+                    {
+                        availableCloudZones2_1.push(cloudZone.name)
+                    }
+                    if (cloudZoneTag.value == purpose2_2)
+                    {
+                        availableCloudZones2_2.push(cloudZone.name)
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* 
+
+
+zonesObjects = new Array()
+
+var pathUri = '/iaas/api/cloud-accounts'
+var cloudAccounts = System.getModule("amdocs.utilities").vraGetOperation(pathUri)
+
+for each(var cloudAccount in cloudAccounts.content)
+{
+    for each (var cloudAccountTag in cloudAccount.tags)
+    {
+        if (cloudAccountTag.key == 'location')
+        {
+            if (cloudAccountTag.value == cloudAccountLocation)
+            {
+                var cloudAccountId = cloudAccount.id
+                break
+            }
+        }
+    }
+}
+
+var pathUri = '/iaas/api/zones'
+var cloudZones = System.getModule("amdocs.utilities").vraGetOperation(pathUri)
+
+for each(var cloudZone in cloudZones.content)
+{
+    if (cloudZone.cloudAccountId == cloudAccountId)
+    {
+        for each(var cloudZoneTag in cloudZone.tags)
+        {
+            if (cloudZoneTag.key == 'purpose')
+            {
+                if (cloudZoneTag.value == purpose)
+                {
+                    zonesObjects.push(cloudZone)
+                }
+            }
+        }
+    }
+}
+
+ */]]></script>
+    <in-binding>
+      <bind name="cloudAccountLocation_1" type="string" export-name="cloudAccountLocation_1"/>
+      <bind name="cloudAccountLocation_2" type="string" export-name="cloudAccountLocation_2"/>
+      <bind name="purpose1_1" type="string" export-name="purpose1_1"/>
+      <bind name="purpose1_2" type="string" export-name="purpose1_2"/>
+      <bind name="purpose2_1" type="string" export-name="purpose2_1"/>
+      <bind name="purpose2_2" type="string" export-name="purpose2_2"/>
+    </in-binding>
+    <out-binding>
+      <bind name="availableCloudZones1_1" type="Array/string" export-name="availableCloudZones1_1"/>
+      <bind name="availableCloudZones1_2" type="Array/string" export-name="availableCloudZones1_2"/>
+      <bind name="availableCloudZones2_1" type="Array/string" export-name="availableCloudZones2_1"/>
+      <bind name="availableCloudZones2_2" type="string" export-name="availableCloudZones2_2"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="140.0" x="520.0"/>
+  </workflow-item>
+  <workflow-item name="item18" out-name="item6" type="task">
+    <display-name><![CDATA[Get Most Available Cloud Zone]]></display-name>
+    <script encoded="false"><![CDATA[zones = new Array()
+
+zones.push(System.getModule("com.ca.vra.projects").returnMostAvailableCloudZone(availableCloudZones1_1, orgId))
+zones.push(System.getModule("com.ca.vra.projects").returnMostAvailableCloudZone(availableCloudZones1_2, orgId))
+zones.push(System.getModule("com.ca.vra.projects").returnMostAvailableCloudZone(availableCloudZones2_1, orgId))
+zones.push(System.getModule("com.ca.vra.projects").returnMostAvailableCloudZone(availableCloudZones2_2, orgId))]]></script>
+    <in-binding>
+      <bind name="orgId" type="string" export-name="orgId"/>
+      <bind name="availableCloudZones1_1" type="Array/string" export-name="availableCloudZones1_1"/>
+      <bind name="availableCloudZones1_2" type="Array/string" export-name="availableCloudZones1_2"/>
+      <bind name="availableCloudZones2_1" type="Array/string" export-name="availableCloudZones2_1"/>
+      <bind name="availableCloudZones2_2" type="string" export-name="availableCloudZones2_2"/>
+    </in-binding>
+    <out-binding>
+      <bind name="zones" type="Array/string" export-name="zones"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="140.0" x="760.0"/>
+  </workflow-item>
+  <workflow-item name="item19" type="end" end-mode="0">
+    <in-binding/>
+    <position y="450.0" x="180.0"/>
+  </workflow-item>
+  <workflow-item name="item20" out-name="item21" type="task">
+    <display-name><![CDATA[Prepare Delete Project]]></display-name>
+    <script encoded="false"><![CDATA[deleteProjectPathUri = '/iaas/api/projects/' + newProjectId]]></script>
+    <in-binding>
+      <bind name="newProjectId" type="string" export-name="newProjectId"/>
+    </in-binding>
+    <out-binding>
+      <bind name="deleteProjectPathUri" type="string" export-name="deleteProjectPathUri"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="310.0" x="380.0"/>
+  </workflow-item>
+  <workflow-item name="item21" out-name="item29" type="task" script-module="amdocs.utilities/vraDeleteOperation">
+    <display-name><![CDATA[Delete Project]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("amdocs.utilities").vraDeleteOperation(pathUri);
+]]></script>
+    <in-binding>
+      <bind name="pathUri" type="string" export-name="deleteProjectPathUri"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name=""/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="310.0" x="260.0"/>
+  </workflow-item>
+  <workflow-item name="item22" out-name="item23" type="task">
+    <display-name><![CDATA[Prepare Delete Sharing Policy]]></display-name>
+    <script encoded="false"><![CDATA[deletePolicyPathUri = '/policy/api/policies/' + policyId]]></script>
+    <in-binding>
+      <bind name="policyId" type="string" export-name="policyId"/>
+    </in-binding>
+    <out-binding>
+      <bind name="deletePolicyPathUri" type="string" export-name="deletePolicyPathUri"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="310.0" x="0.0"/>
+  </workflow-item>
+  <workflow-item name="item23" out-name="item36" type="task" script-module="amdocs.utilities/vraDeleteOperation">
+    <display-name><![CDATA[Delete Sharing Policy]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("amdocs.utilities").vraDeleteOperation(pathUri);
+]]></script>
+    <in-binding>
+      <bind name="pathUri" type="string" export-name="deletePolicyPathUri"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name=""/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="380.0" x="0.0"/>
+  </workflow-item>
+  <workflow-item name="item24" out-name="item0" type="task">
+    <display-name><![CDATA[Set Email Content]]></display-name>
+    <script encoded="false"><![CDATA[addressList = new Array();
+
+addressList = projectAdministrators.map(function(item){
+	return item.replace("corp","int");
+})
+
+addressList.push(requestedBy.replace("corp.",""))
+
+// Set email subject
+mailSubject = "New project '" + projectName + "' created for " + tenant;
+
+
+mailContent = "<html><head><title>New project '" + projectName + "' created for " + tenant + "</title><META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\" />";
+mailContent += "<style>";
+mailContent += ".XSLTableBody {font-family: Arial, Helvetica, sans-serif;font-size: 9pt;background-color: #29a329;}";
+mailContent += ".XSLTableHeader { font-family: Arial, Helvetica, sans-serif; font-size: 9pt; font-weight: bold; background-color: #4fcc78;}";
+mailContent += ".TitleTextNotBold { font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: #FFFFFF;text-decoration: none;}";
+mailContent += ".TitleText {font-family: Arial, Helvetica, sans-serif;font-size: 10pt;color: #FFFFFF;font-weight: bold;text-decoration: none;}";
+mailContent += ".DataContent {font-family: Arial, Helvetica, sans-serif;font-size: 8pt;color: #000000;background-color: #FFFFFF;}";
+mailContent += ".DateContent2 {font-family: Arial, Helvetica, sans-serif;font-size: 8pt;background-color: #ECECEC;}";
+mailContent += ".SelectedBG { background-color: #E6E6E6;}";
+mailContent += ".ErrorBG {background-color: #F88878;}";
+mailContent += ".InfoBG {background-color: lightyellow;}";
+mailContent += ".RedFont {color: red;}";
+mailContent += ".BordersL { border-left: solid 1px #6699CC;}";
+mailContent += ".BordersBL { border-bottom: solid 1px #6699CC;border-left: solid 1px #6699CC;}";
+mailContent += ".BordersBLT { border-bottom: solid 1px #6699CC;border-left: solid 1px #6699CC;border-top: solid 1px #6699CC;}";
+mailContent += ".BordersBLR {border-bottom: solid 1px #6699CC;border-left: solid 1px #6699CC;border-right: solid 1px #6699CC;}";
+mailContent += ".BordersLTR { border-left: solid 1px #6699CC;border-top: solid 1px #6699CC;border-right: solid 1px #6699CC;}";
+mailContent += ".BordersAll {border: solid 1px #6699CC;}";
+mailContent += ".ButtonPadding {overflow: visible;padding: 2px 2px 2px 2px;}";
+mailContent += ".Button {font-family: Arial, Helvetica, sans-serif;font-size: 9pt; color: #003163;background-color: #E7EFFF;border: 1px solid #6699CC;}</style></head>";
+mailContent += "<body><table class=\"BordersLTR\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" width=\"100%\">";
+mailContent += "<tr><td align=\"center\"><table class=\"BordersAll\" border=\"0\" cellspacing=\"2\" cellpadding=\"0\" width=\"100%\">";
+mailContent += "<tr><td align=\"center\"><table class=\"XSLTableBody\" border=\"0\" cellspacing=\"2\" cellpadding=\"2\" width=\"100%\">";
+mailContent += "<tr><td class=\"TitleText\">New project '" + projectName + "' Details: </td></tr></table>";
+mailContent += "<table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" width=\"100%\">";
+mailContent += "<tr><td class=\"DateContent2 BordersBLT\" width=\"25%\">&nbsp;<strong>Project Name</strong></td><td class=\"DataContent BordersAll\" width=\"75%\"> " +projectName+" </td></tr>";
+mailContent += "<tr><td class=\"DateContent2 BordersBLT\" width=\"25%\">&nbsp;<strong>Market Code</strong></td><td class=\"DataContent BordersAll\" width=\"75%\"> "+projectPrefix+" </td></tr>";
+mailContent += "<tr><td class=\"DateContent2 BordersBLT\" width=\"25%\">&nbsp;<strong>Project Owner</strong></td><td class=\"DataContent BordersAll\" width=\"75%\"> "+projectOwner+" </td></tr>";
+mailContent += "<tr><td class=\"DateContent2 BordersBLT\" width=\"25%\">&nbsp;<strong>Requested By</strong></td><td class=\"DataContent BordersAll\" width=\"75%\"> "+ requestedBy +" </td></tr>";
+mailContent += "<tr><td class=\"DateContent2 BordersBLT\" width=\"25%\">&nbsp;<strong>Business Group</strong></td><td class=\"DataContent BordersAll\" width=\"75%\"> "+projectPrefix+" </td></tr>";
+mailContent += "<tr><td class=\"DateContent2 BordersBLT\" width=\"25%\">&nbsp;<strong>Catalog Service</strong></td><td class=\"DataContent BordersAll\" width=\"75%\"> "+projectName+" </td></tr>";
+
+mailContent += "</td></tr>";
+
+mailContent += "</table></table></table><br>"
+mailContent += "<p>Regards,</p>";
+mailContent += "<p><b>Project In a Click</b></p>";
+mailContent += "</body></html>";]]></script>
+    <in-binding>
+      <bind name="projectName" type="string" export-name="projectName"/>
+      <bind name="tenant" type="string" export-name="tenant"/>
+      <bind name="projectOwner" type="string" export-name="projectOwner"/>
+      <bind name="projectPrefix" type="string" export-name="projectPrefix"/>
+      <bind name="requestedBy" type="string" export-name="requestedBy"/>
+      <bind name="projectAdministrators" type="Array/string" export-name="projectAdministrators"/>
+    </in-binding>
+    <out-binding>
+      <bind name="addressList" type="Array/string" export-name="addressList"/>
+      <bind name="mailSubject" type="string" export-name="mailSubject"/>
+      <bind name="mailContent" type="string" export-name="mailContent"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="160.0" x="1360.0"/>
+  </workflow-item>
+  <workflow-item name="item25" out-name="item0" type="link" linked-workflow-id="4b97c8a6-88fa-4dd9-a25d-dfeb7b8fb3b4">
+    <display-name><![CDATA[Send Mail Notification]]></display-name>
+    <in-binding>
+      <bind name="toAddress" type="Array/string" export-name="addressList"/>
+      <bind name="mailContent" type="string" export-name="mailContent"/>
+      <bind name="mailSubject" type="string" export-name="mailSubject"/>
+      <bind name="bccList" type="Array/string" export-name=""/>
+      <bind name="ccList" type="Array/string" export-name=""/>
+    </in-binding>
+    <out-binding/>
+    <description><![CDATA[ ]]></description>
+    <position y="120.0" x="1460.0"/>
+  </workflow-item>
+  <workflow-item name="item27" out-name="item31" type="condition" alt-out-name="item29" comparator="0">
+    <display-name><![CDATA[Delete Project?]]></display-name>
+    <script encoded="false"><![CDATA[// Generated by the system, cannot be edited
+return (newProjectId !== null);]]></script>
+    <in-binding>
+      <bind name="newProjectId" type="string" export-name="newProjectId"/>
+    </in-binding>
+    <out-binding/>
+    <condition name="newProjectId" type="string" comparator="3" label="null"/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="220.0" x="140.0"/>
+  </workflow-item>
+  <workflow-item name="item29" out-name="item22" type="condition" alt-out-name="item36" comparator="0">
+    <display-name><![CDATA[Delete Policy?]]></display-name>
+    <script encoded="false"><![CDATA[// Generated by the system, cannot be edited
+return (policyId !== null);]]></script>
+    <in-binding>
+      <bind name="policyId" type="string" export-name="policyId"/>
+    </in-binding>
+    <out-binding/>
+    <condition name="policyId" type="string" comparator="3" label="null"/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="300.0" x="140.0"/>
+  </workflow-item>
+  <workflow-item name="item31" out-name="item32" type="task">
+    <display-name><![CDATA[Prepare Remove Cloud Zone ]]></display-name>
+    <script encoded="false"><![CDATA[//We retrieve new project body for next patch request
+var pathUri = '/iaas/api/projects/' + newProjectId
+var content = System.getModule("amdocs.utilities").vraGetOperation(pathUri)
+
+removeCloudZonesBody = content
+//zoneAssignmentConifguration is required
+removeCloudZonesBody.zoneAssignmentConfigurations= new Array()
+//We delete the zones we retreived
+delete removeCloudZonesBody.zones
+removeCloudZonesBody = JSON.stringify(removeCloudZonesBody)
+
+removeCloudZonesPathUri = '/iaas/api/projects/' + newProjectId
+]]></script>
+    <in-binding>
+      <bind name="newProjectId" type="string" export-name="newProjectId"/>
+    </in-binding>
+    <out-binding>
+      <bind name="removeCloudZonesBody" type="string" export-name="removeCloudZonesBody"/>
+      <bind name="removeCloudZonesPathUri" type="string" export-name="removeCloudZonesPathUri"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="230.0" x="260.0"/>
+  </workflow-item>
+  <workflow-item name="item32" out-name="item20" type="task" script-module="amdocs.utilities/vraPatchOperation">
+    <display-name><![CDATA[Remove Cloud Zones]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("amdocs.utilities").vraPatchOperation(pathUri,body);
+]]></script>
+    <in-binding>
+      <bind name="pathUri" type="string" export-name="removeCloudZonesPathUri"/>
+      <bind name="body" type="string" export-name="removeCloudZonesBody"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name=""/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="230.0" x="380.0"/>
+  </workflow-item>
+  <workflow-item name="item34" out-name="item13" type="link" linked-workflow-id="3cde3576-f7a0-41aa-b794-5a86af4c4181">
+    <display-name><![CDATA[Create Content Source]]></display-name>
+    <in-binding>
+      <bind name="projectName" type="string" export-name="projectName"/>
+      <bind name="projectId" type="string" export-name="newProjectId"/>
+    </in-binding>
+    <out-binding>
+      <bind name="newContentSource" type="string" export-name="newContentSource"/>
+    </out-binding>
+    <description><![CDATA[ ]]></description>
+    <position y="150.0" x="1180.0"/>
+  </workflow-item>
+  <workflow-item name="item36" out-name="item37" type="condition" alt-out-name="item19" comparator="0">
+    <display-name><![CDATA[Delete Content Source]]></display-name>
+    <script encoded="false"><![CDATA[// Generated by the system, cannot be edited
+return (newContentSourceId !== null);]]></script>
+    <in-binding>
+      <bind name="newContentSourceId" type="string" export-name="newContentSourceId"/>
+    </in-binding>
+    <out-binding/>
+    <condition name="newContentSourceId" type="string" comparator="3" label="null"/>
+    <description><![CDATA[Custom decision based on a custom script.]]></description>
+    <position y="370.0" x="140.0"/>
+  </workflow-item>
+  <workflow-item name="item37" out-name="item38" type="task">
+    <display-name><![CDATA[Prepare Delete Content Source]]></display-name>
+    <script encoded="false"><![CDATA[deleteContentSourcePathUri = '/catalog/api/admin/sources/' + newContentSourceId]]></script>
+    <in-binding>
+      <bind name="newContentSourceId" type="string" export-name="newContentSourceId"/>
+    </in-binding>
+    <out-binding>
+      <bind name="deleteContentSourcePathUri" type="string" export-name="deleteContentSourcePathUri"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="380.0" x="260.0"/>
+  </workflow-item>
+  <workflow-item name="item38" out-name="item19" type="task" script-module="amdocs.utilities/vraDeleteOperation">
+    <display-name><![CDATA[Delete Content Source]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("amdocs.utilities").vraDeleteOperation(pathUri);
+]]></script>
+    <in-binding>
+      <bind name="pathUri" type="string" export-name="deleteContentSourcePathUri"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name=""/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="460.0" x="260.0"/>
+  </workflow-item>
+  <presentation>
+    <p-param name="projectName">
+      <desc><![CDATA[projectName]]></desc>
+    </p-param>
+    <p-param name="administrators">
+      <desc><![CDATA[administrators]]></desc>
+    </p-param>
+    <p-param name="members">
+      <desc><![CDATA[members]]></desc>
+    </p-param>
+    <p-param name="projectPrefix">
+      <desc><![CDATA[projectPrefix]]></desc>
+    </p-param>
+    <p-param name="projectOwner">
+      <desc><![CDATA[projectOwner]]></desc>
+    </p-param>
+    <p-param name="cloudZoneName1_1">
+      <desc><![CDATA[cloudZoneName1_1]]></desc>
+    </p-param>
+    <p-param name="czSelectionType">
+      <desc><![CDATA[czSelectionType]]></desc>
+    </p-param>
+    <p-param name="requestedBy">
+      <desc><![CDATA[requestedBy]]></desc>
+    </p-param>
+    <p-param name="cloudZoneName1_2">
+      <desc><![CDATA[cloudZoneName1_2]]></desc>
+    </p-param>
+    <p-param name="cloudZoneName2_1">
+      <desc><![CDATA[cloudZoneName2_1]]></desc>
+    </p-param>
+    <p-param name="cloudZoneName2_2">
+      <desc><![CDATA[cloudZoneName2_2]]></desc>
+    </p-param>
+    <p-param name="cloudAccountLocation_1">
+      <desc><![CDATA[cloudAccountLocation_1]]></desc>
+    </p-param>
+    <p-param name="cloudAccountLocation_2">
+      <desc><![CDATA[cloudAccountLocation_2]]></desc>
+    </p-param>
+    <p-param name="purpose1_1">
+      <desc><![CDATA[purpose1_1]]></desc>
+    </p-param>
+    <p-param name="purpose1_2">
+      <desc><![CDATA[purpose1_2]]></desc>
+    </p-param>
+    <p-param name="purpose2_2">
+      <desc><![CDATA[purpose2_2]]></desc>
+    </p-param>
+    <p-param name="purpose2_1">
+      <desc><![CDATA[purpose2_1]]></desc>
+    </p-param>
+    <p-param name="supportEmail">
+      <desc><![CDATA[supportEmail]]></desc>
+    </p-param>
+  </presentation>
+</workflow>

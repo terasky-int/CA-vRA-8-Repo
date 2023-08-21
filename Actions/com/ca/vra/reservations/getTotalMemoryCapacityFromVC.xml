@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getTotalMemoryCapacityFromVC" result-type="number" api-version="6.0.0" id="2bd885d5-6778-4218-ae0e-8daa5f2b8655" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.reservations">
+  <param n="cloudZoneName" t="string"><![CDATA[]]></param>
+  <param n="tenantId" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[if (!cloudZoneName)
+{
+    return 0
+}
+
+var clusters = System.getModule("com.ca.vra.reservations").getClustersFromCloudZone(cloudZoneName)
+
+if (clusters.length > 1)
+{
+	throw 'Found more than one cluster in Cloud Zone ' + cloudZoneName
+}
+
+var clusterName = clusters[0]
+
+var clusters = VcPlugin.getAllClusterComputeResources(null, "xpath:matches(name, '" + clusterName + "')");
+var cluster = clusters[0];
+System.log("found Cluster : " + cluster);
+
+
+var memoryCapacity = 0;
+System.log("total memory capacity log");
+
+var resourcePool = cluster.resourcePool;
+var runtimeInfo = resourcePool.runtime;
+System.log("resource pool: "+resourcePool);
+System.log("runtimeInfo: "+runtimeInfo);
+// Memory Allocation
+memoryCapacity = runtimeInfo.memory.maxUsage / 1024 / 1024 /1024 
+
+//memory in GB
+System.log("Total memory capacity before ratio : "  + memoryCapacity);
+
+System.log("TOTAL MEMORY RETURNED: "+memoryCapacity);
+
+var haHosts = cluster.host.length > 8 ? 2 : 1;
+System.log("number of ha hosts : " + haHosts);
+
+var hostMemInBytes = cluster.host[0].hardware.memorySize;
+var hostMemInGB = Math.floor(hostMemInBytes / 1024 / 1024 / 1024);
+System.log("Host Memory in GB : " + hostMemInGB);
+
+var resParams = System.getModule("com.ca.vra.reservations").getReservationParamsFromCE(tenantId)
+var memoryRatio = resParams.memoryRatio
+
+var result = Math.round((memoryCapacity - haHosts * hostMemInGB) * memoryRatio) 
+result = Math.round(result);
+System.log("Available memory to use : " + result);
+
+return result;
+]]></script>
+</dunes-script-module>

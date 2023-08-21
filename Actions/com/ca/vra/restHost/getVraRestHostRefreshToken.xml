@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVraRestHostRefreshToken" result-type="string" api-version="6.0.0" id="0e733bd3-75bc-4e5f-bd79-c9330eb53de9" version="0.0.1" allowed-operations="vfe" category-name="com.ca.vra.restHost">
+  <script encoded="false"><![CDATA[//validate vra rest host
+var restHosts = RESTHostManager.getHosts()
+for each (var hostID in restHosts){
+    var host = RESTHostManager.getHost(hostID)
+    if (host.name.toLowerCase() == "vra host"){
+        var vraRestHost = host;
+    }
+}
+
+//Get vra local admin credentials
+var credentialsPathCE = Server.getConfigurationElementCategoryWithPath("Cloud Automation/General Configs")
+var allCEs = credentialsPathCE.allConfigurationElements
+for each (var element in allCEs){
+    if (element.name.toLowerCase() == "vra environment")
+        var vraAdminCE = element
+}
+
+var username = vraAdminCE.getAttributeWithKey("domainUsername").value
+var password = vraAdminCE.getAttributeWithKey("domainPassword").value
+var domain = vraAdminCE.getAttributeWithKey("domain").value
+
+
+var body = {
+    "username": username,
+	"password": password,
+	"domain": domain,
+    "scope": " "
+}
+
+var pathUri = '/csp/gateway/am/api/login?access_token'
+var restRequest = vraRestHost.createRequest("POST", pathUri, JSON.stringify(body));
+restRequest.setHeader("Content-Type", "application/json");
+var restResponse = restRequest.execute();
+var content = JSON.parse(restResponse.contentAsString);
+var refreshToken = content["refresh_token"]
+
+return refreshToken
+
+]]></script>
+</dunes-script-module>

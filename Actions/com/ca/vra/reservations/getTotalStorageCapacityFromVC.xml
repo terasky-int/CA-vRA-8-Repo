@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getTotalStorageCapacityFromVC" result-type="number" api-version="6.0.0" id="03f910e1-49e9-403d-8ac5-5ea5d6cffc3a" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.reservations">
+  <param n="cloudZoneName" t="string"><![CDATA[]]></param>
+  <param n="tenantId" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[if (!cloudZoneName)
+{
+    return 0
+}
+
+var clusters = System.getModule("com.ca.vra.reservations").getClustersFromCloudZone(cloudZoneName)
+
+if (clusters.length > 1)
+{
+	throw 'Found more than one cluster in Cloud Zone ' + cloudZoneName
+}
+
+var clusterName = clusters[0];
+System.log("found Cluster : " + cluster);
+
+var storageCapacity = 0;
+
+System.log("Cluster Name : " + clusterName);
+
+var clusters = VcPlugin.getAllClusterComputeResources(null, "xpath:matches(name, '" + clusterName + "')");
+var cluster = clusters[0];
+//System.log("found Cluster : " + cluster);
+
+var datastores = cluster.datastore;	
+
+var storageClusterName = System.getModule("com.ca.vra.reservations").getStorageClusterForCloudZone(cloudZoneName)
+
+for each(var datastore in datastores)
+{ 
+    if(datastore.parent.name == storageClusterName) // if datastore is part of storage cluster
+    {
+        storageCapacity += Math.round((datastore.summary.capacity/1024/1024/1024))    
+        System.log("summary capacity : " + storageCapacity)
+    }
+}
+
+System.warn("TOTAL STORAGE RETURNED: " + storageCapacity);
+
+return storageCapacity]]></script>
+</dunes-script-module>

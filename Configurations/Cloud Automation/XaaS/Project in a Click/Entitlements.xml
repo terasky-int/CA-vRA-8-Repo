@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="aaa2239d-e577-4e3b-823f-4216e21c6958" version="0.0.0">
+  <display-name><![CDATA[Entitlements]]></display-name>
+  <atts>
+    <att name="XaaS - Cloning" type="string" read-only="false">
+      <value encoded="n"><![CDATA[]]></value>
+    </att>
+  </atts>
+</config-element>
