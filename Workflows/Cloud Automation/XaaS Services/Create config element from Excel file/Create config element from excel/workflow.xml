@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="1af4a0d1-0793-4a11-bf43-842ec01689ab" editor-version="2.0" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Create config element from excel</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="inFile" type="MimeAttachment"/>
+    </input>
+    <attrib name="categoryPath" type="string">
+        <value encoded="n">TeraSky</value>
+    </attrib>
+    <attrib name="configName" type="string">
+        <value encoded="n">testDepConfig</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">var configCategory = Server.getConfigurationElementCategoryWithPath(categoryPath);
+var configElement = null;
+if (configCategory) {
+    System.log("Found configuration category '" + configCategory.name + "'");
+    var configElements = configCategory.configurationElements;
+    for (var i in configElements) {
+        ce = configElements[i];
+        if (ce.name == configName) {
+            configElement = ce;
+            break;
+        }
+    }
+    if (configElement) {
+        System.log("Found configuration '" + configElement.name + "'");
+    } else {
+        configElement = Server.createConfigurationElement(categoryPath, configName);
+        System.log("Created configuration element '" + configElement.name + "'");
+    }
+} else {
+    configElement = Server.createConfigurationElement(categoryPath, configName);
+    System.log("Created category path '" + categoryPath + "' and configuration element '" + configElement.name + "'");
+}
+
+var lines = new Array();
+var completedCSVData = inFile.content
+
+//lines = completedCSVData.split(/\r\n|\r\n/);
+lines = completedCSVData.split("\n"); 
+//System.log("all lines: = " + lines);
+
+//var _lines = CSV_CONTENT.split("\n"); 
+for (var i in lines) {
+    if(lines[i])
+    {
+         System.log(i + ": " + lines[i]);
+         var _fields = lines[i].split(",");
+            var key = _fields[0];
+            var value = _fields[1];
+            //var type = _fields[1];
+            //var allValues = _fields[2]; //if value is single (not comma seperated)
+            //if (_fields.length &gt; 3) { // if value itself has multiple comma seperated values
+            //    for (var j = 3; j &lt; _fields.length; j++)
+            //        allValues += "," + _fields[j];
+            //}
+            configElement.setAttributeWithKey(key,value,"string");
+    }
+   
+
+}</script>
+        <in-binding>
+            <bind name="categoryPath" type="string" export-name="categoryPath"/>
+            <bind name="configName" type="string" export-name="configName"/>
+            <bind name="inFile" type="MimeAttachment" export-name="inFile"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="170.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

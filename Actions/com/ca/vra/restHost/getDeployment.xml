@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getDeployment" result-type="string" api-version="6.0.0" id="99c7e065-41fd-4489-bbcd-d5aa6da96b05" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.restHost">
+  <param n="deploymentId" t="string"><![CDATA[]]></param>
+  <param n="accessToken" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var cec = Server.getConfigurationElementCategoryWithPath("General")
+
+for each(var ce in cec.allConfigurationElements)
+{
+    if(ce.name == "vRAHost")
+    {
+        var vraCe = ce
+        break;
+    }
+}
+System.log("CE Found: " + vraCe.name)
+
+var restHost = vraCe.getAttributeWithKey("restHost").value;
+
+var uri = "/deployment/api/deployments/" + deploymentId;
+var method = "GET";
+var body = "{}";
+var request = restHost.createRequest(method , uri , body);
+request.setHeader("Authorization" , "Bearer " + accessToken);
+request.setHeader("Content-Type" , "application/json");
+var response = request.execute();
+
+ 
+// validate the status code was within the 200 range
+if(response.statusCode.toString().charAt(0) != "2")
+{
+    throw "error retrieving the deployment data. status code " + response.statusCode;
+}
+
+ 
+var strResponseBody = response.contentAsString;
+var jsonResponseBody = JSON.parse(strResponseBody);
+ 
+return jsonResponseBody;]]></script>
+</dunes-script-module>

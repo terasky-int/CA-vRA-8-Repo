@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="2920e3ad-3375-406b-837b-166e6e5969cf" version="0.0.2" api-version="6.0.0" allowed-operations="vfe" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Create DRS Rule to enforce virtual machines to be hosted on the same host</display-name>
+    <position y="0.0" x="25.0"/>
+    <input>
+        <param name="vCenterVMs" type="Array/VC:VirtualMachine">
+            <description>VM Child Machines</description>
+        </param>
+        <param name="DRSRuleName" type="string">
+            <description>DRS Rule Name</description>
+        </param>
+    </input>
+    <output>
+        <param name="task" type="VC:Task"/>
+    </output>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <position y="0.0" x="264.5"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Update DRS Rule</display-name>
+        <script encoded="false">// ------- Add DRS rule Task -------
+if (vCenterVM.length &gt; 0)
+{
+	var vcClusterComputeResource = vCenterVM[0].runtime.host.parent;
+	System.log("Cluster Name: " + vcClusterComputeResource.name);
+
+	var drsrule = new VcClusterAffinityRuleSpec();
+	drsrule.vm = vCenterVM;
+	drsrule.enabled = true;
+	drsrule.mandatory = false;
+	drsrule.userCreated = true;
+	drsrule.name = DRSRuleName;
+
+	var objVcClusterRuleSpec;
+	objVcClusterRuleSpec = new VcClusterRuleSpec();
+	objVcClusterRuleSpec.info = drsrule;
+	objVcClusterRuleSpec.operation = VcArrayUpdateOperation.add;
+	var arrVcClusterRulesSpec;
+	arrVcClusterRulesSpec = new Array(objVcClusterRuleSpec);
+		 
+	var objVcClusterConfigSpecEx;
+	objVcClusterConfigSpecEx = new VcClusterConfigSpecEx();
+	objVcClusterConfigSpecEx.rulesSpec = arrVcClusterRulesSpec;
+
+	vcClusterComputeResource.reconfigureComputeResource_Task(objVcClusterConfigSpecEx , true);	
+}
+
+</script>
+        <in-binding>
+            <bind name="vCenterVM" type="Array/VC:VirtualMachine" export-name="vCenterVMs"/>
+            <bind name="DRSRuleName" type="string" export-name="DRSRuleName"/>
+        </in-binding>
+        <out-binding>
+            <bind name="task" type="VC:Task" export-name="task"/>
+        </out-binding>
+        <position y="9.954545454545453" x="104.5"/>
+    </workflow-item>
+    <presentation>
+        <p-param name="vCenterVMs">
+            <desc>Array of virtual machines</desc>
+        </p-param>
+        <p-param name="DRSRuleName">
+            <desc>MMBluePrintName</desc>
+        </p-param>
+    </presentation>
+</ns2:workflow>

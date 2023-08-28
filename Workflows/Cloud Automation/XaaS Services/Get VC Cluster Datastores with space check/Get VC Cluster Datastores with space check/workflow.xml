@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="ed0f6d66-97e3-41b9-8234-70ddd4ec2cc2" editor-version="2.0" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Get VC Cluster Datastores with space check</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="env" type="string"/>
+    </input>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">var vcs = VcPlugin.allSdkConnections
+for each(var vc in vcs)
+{
+    if(env == "nl")
+    {
+        if(vc.name.indexOf("ts") &gt; -1)
+        {
+            System.log(vc.name)
+            var clusters = vc.getAllClusterComputeResources();
+            for each(var cluster in clusters)
+            {
+                System.log(cluster.name)
+                var datastores = cluster.datastore;
+               
+                for each(datastore in datastores)
+                {
+                   var dsCapacity = datastore.summary.capacity / 1024 / 1024 / 1024;
+                    var dsFreeSpace = datastore.summary.freeSpace / 1024 / 1024 / 1024;
+                    var percentFree = dsFreeSpace / dsCapacity * 100;
+                    System.log(datastore.name + " Capacity: " + dsCapacity + ", Free Space: " + dsFreeSpace + ", % Free: " + percentFree)
+                          
+                }
+            }
+        }
+        
+    }
+ 
+}
+
+
+          </script>
+        <in-binding>
+            <bind name="env" type="string" export-name="env"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="170.0"/>
+    </workflow-item>
+    <presentation/>
+</ns2:workflow>

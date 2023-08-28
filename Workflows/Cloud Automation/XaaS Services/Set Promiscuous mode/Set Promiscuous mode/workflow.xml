@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="f0fae875-6897-45a1-b401-d28b18f561bb" version="0.0.1" api-version="6.0.0" allowed-operations="vfe" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Set Promiscuous mode</display-name>
+    <position y="0.45454545454545325" x="25.0"/>
+    <input>
+        <param name="vCenterVm" type="VC:VirtualMachine"/>
+    </input>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <position y="0.0" x="264.5"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item0" type="task" comparator="0">
+        <display-name>Update Security</display-name>
+        <script encoded="false">System.log("Virtial Machine Name: " + vCenterVm.name);
+var virtualWire = null;
+
+var network = System.getModule("com.vmware.library.vc.vm.network").getNetworkForGivenNic(vCenterVm,1);
+if (network != null)
+{
+	System.log("Network Name: " + network.name);
+	
+	if (network.name.indexOf("(LAN)") != -1) { //(VRAdvSwitch)
+		virtualWire = network;
+	}
+} else { System.error('Virtual network was not found!!!'); }
+		
+if (virtualWire != null)
+{
+	System.log("Current Virtual Wire Promiscuous Mode: " + virtualWire.config.defaultPortConfig.securityPolicy.allowPromiscuous.value);
+	
+	if (!virtualWire.config.defaultPortConfig.securityPolicy.allowPromiscuous.value) {
+		// Some general information
+		var spec = new VcDVPortgroupConfigSpec();
+		spec.configVersion = virtualWire.config.configVersion;
+		var defaultPortConfig = new VcVMwareDVSPortSetting();
+		var securityPolicy = new VcDVSSecurityPolicy();
+		
+		// Set security settings
+		securityPolicy.inherited = false;
+		securityPolicy.allowPromiscuous = new VcBoolPolicy();
+		securityPolicy.allowPromiscuous.inherited = false;
+		securityPolicy.allowPromiscuous.value = true; 
+		securityPolicy.macChanges = new VcBoolPolicy();
+		securityPolicy.macChanges.inherited = false;
+		securityPolicy.macChanges.value  = true; 
+		securityPolicy.forgedTransmits = new VcBoolPolicy();
+		securityPolicy.forgedTransmits.inherited = false;
+		securityPolicy.forgedTransmits.value = true;
+		
+		// Submit task to reconfigure
+		defaultPortConfig.securityPolicy = securityPolicy;
+		spec.defaultPortConfig = defaultPortConfig;
+		virtualWire.reconfigureDVPortgroup_Task(spec);
+	
+		System.log("Virtual Wire Security Mode has been updated:");
+		System.log("	Promiscuous Mode:  Accept");
+		System.log("	MAC Address Changes:  Accept");
+		System.log("	Forged Transmits:  Accept");
+	}
+}</script>
+        <in-binding>
+            <bind name="vCenterVm" type="VC:VirtualMachine" export-name="vCenterVm"/>
+        </in-binding>
+        <out-binding/>
+        <position y="9.954545454545453" x="104.5"/>
+    </workflow-item>
+    <presentation>
+        <p-param name="vCenterVm">
+            <desc>vm</desc>
+        </p-param>
+    </presentation>
+</ns2:workflow>

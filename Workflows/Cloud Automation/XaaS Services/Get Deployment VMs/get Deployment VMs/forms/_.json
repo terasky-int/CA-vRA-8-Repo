@@ -1,0 +1,1 @@
+{"schema":{"deploymentID":{"id":"deploymentID","type":{"dataType":"string"},"label":"deploymentID"}},"layout":{"pages":[{"id":"page_1","title":"General","sections":[{"id":"section_0","fields":[{"id":"deploymentID","display":"textField"}]}]}]},"itemId":""}

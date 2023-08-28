@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVRAAuth" result-type="string" api-version="6.0.0" id="33765384-b999-45e4-8655-7dfefb5ef1cc" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.restHost">
+  <script encoded="false"><![CDATA[var cec = Server.getConfigurationElementCategoryWithPath("General")
+
+for each(var ce in cec.allConfigurationElements)
+{
+    if(ce.name == "vRAHost")
+    {
+        var vraCe = ce
+        break;
+    }
+}
+System.log("CE Found: " + vraCe.name)
+
+
+var vraUser = vraCe.getAttributeWithKey("username").value
+var vraPass = vraCe.getAttributeWithKey("password").value
+var vraRestHost = vraCe.getAttributeWithKey("restHost").value
+
+//System.log("User: " + vraUser);
+
+var uri = "/csp/gateway/am/api/login?access_token";
+var method = "POST";
+var body = '{"username":"' + vraUser + '","password":"' + vraPass + '"}';
+var request = vraRestHost.createRequest(method,uri,body);
+request.setHeader("Content-Type" , "application/json");
+
+var response = request.execute();
+//System.log(response.uri)
+// request validation
+if(response.statusCode.toString().charAt(0) != "2")
+{
+    throw "error occured while request new vra token"
+}
+
+// convert Rest Output to string
+var refTokenInfo = JSON.parse(response.contentAsString);
+
+// save refresh token
+var refToken = refTokenInfo.refresh_token
+
+//validate token
+if(refToken == null || refToken == "")
+{
+    throw "error occured while requesting a token"
+}
+
+
+// return token
+System.log("vRA Refresh Token has been retirieved successfully")
+
+uri = "/iaas/api/login";
+body = '{"refreshToken": "' + refToken + '"}';
+request = vraRestHost.createRequest(method,uri,body);
+request.setHeader("Content-Type" , "application/json");
+
+response = request.execute();
+
+// request validation
+if(response.statusCode.toString().charAt(0) != "2")
+{
+    throw "error occured while request new vra token"
+}
+
+// convert Rest Output to string
+var tokenInfo = JSON.parse(response.contentAsString);
+
+// save barear token
+var token = tokenInfo.token;
+
+//validate token
+if(token == null || token == "")
+{
+    throw "error occured while requesting a token"
+}
+
+
+
+System.log("vRA Bearer Token has been retirieved successfully")
+return token
+
+
+]]></script>
+</dunes-script-module>

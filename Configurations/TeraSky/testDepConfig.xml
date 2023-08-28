@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="bc04918f-3a4f-4872-a293-d72dadf9d0fa" version="0.0.0">
+  <display-name><![CDATA[testDepConfig]]></display-name>
+  <atts>
+    <att name="col1" type="string" read-only="false">
+      <value encoded="n"><![CDATA[col2
+]]></value>
+    </att>
+    <att name="data" type="string" read-only="false">
+      <value encoded="n"><![CDATA[data2
+]]></value>
+    </att>
+    <att name="data4" type="string" read-only="false">
+      <value encoded="n"><![CDATA[data5
+]]></value>
+    </att>
+  </atts>
+</config-element>

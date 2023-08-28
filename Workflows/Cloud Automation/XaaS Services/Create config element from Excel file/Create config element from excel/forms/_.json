@@ -1,0 +1,1 @@
+{"schema":{"inFile":{"id":"inFile","type":{"dataType":"file"},"label":"inFile","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_rrzspb4t","title":"General","sections":[{"id":"section_wow2uoc5","fields":[{"id":"inFile","display":"fileUpload","signpostPosition":"right-middle","state":{"visible":true,"read-only":false}}]}]}]},"itemId":""}

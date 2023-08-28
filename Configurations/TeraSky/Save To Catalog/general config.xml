@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="e147e593-b897-492b-bf82-d31fc1e22861" version="1.0.0">
+  <display-name><![CDATA[general config]]></display-name>
+  <atts>
+    <att name="username" type="string" read-only="false">
+      <value encoded="n"><![CDATA[roy]]></value>
+      <description><![CDATA[admin username for VRA API Calls]]></description>
+    </att>
+    <att name="password" type="SecureString" read-only="false">
+      <value encoded="n"><![CDATA[__NULL__]]></value>
+      <description><![CDATA[VRA Admin User Password]]></description>
+    </att>
+    <att name="vraRestHost" type="REST:RESTHost" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='f5c87113-76b3-476b-89e7-61b57d3ad76f'&dunesName='REST:RESTHost']]></value>
+    </att>
+    <att name="parentVmFolder" type="VC:VmFolder" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='ts-vc-01.terasky.local%2Cid:group-v2066'&dunesName='VC:VmFolder']]></value>
+    </att>
+    <att name="templateNetwork" type="string" read-only="false">
+      <value encoded="n"><![CDATA[AdielTest02]]></value>
+      <description><![CDATA[the nsx-t logical switch on which the VM templates will be configured if nsx-t-environment is set to true]]></description>
+    </att>
+    <att name="nsx-t-environemnt" type="boolean" read-only="false">
+      <value encoded="n"><![CDATA[false]]></value>
+      <description><![CDATA[is the environment configured with nsx-t or not]]></description>
+    </att>
+    <att name="configure-linked-clones" type="boolean" read-only="false">
+      <value encoded="n"><![CDATA[false]]></value>
+      <description><![CDATA[should the blueprint be configured with linked clones or full clones]]></description>
+    </att>
+    <att name="template-port-group" type="VC:DistributedVirtualPortgroup" read-only="false">
+      <value encoded="n"><![CDATA[dunes://service.dunes.ch/CustomSDKObject?id='ts-vc-01.terasky.local%2Cid:dvportgroup-3177'&dunesName='VC:DistributedVirtualPortgroup']]></value>
+      <description><![CDATA[this is needed only if nsx-t-environment is set to false]]></description>
+    </att>
+  </atts>
+</config-element>

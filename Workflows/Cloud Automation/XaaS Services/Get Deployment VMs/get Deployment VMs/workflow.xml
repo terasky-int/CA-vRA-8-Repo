@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item2" object-name="workflow:name=generic" id="a28bc5a1-836c-4009-a160-ba37c37c23bc" version="0.0.2" api-version="6.0.0" allowed-operations="vfe" editor-version="1.6" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[get Deployment VMs]]></display-name>
+  <position y="50.0" x="80.0"/>
+  <input>
+    <param name="deploymentID" type="string"/>
+  </input>
+  <output>
+    <param name="allvms" type="Array/VC:VirtualMachine"/>
+    <param name="deploymentName" type="string"/>
+  </output>
+  <attrib name="bearer" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="deploymentResources" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="actionResult" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="deploymentResult" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="50.0" x="1020.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item5" type="task">
+    <display-name><![CDATA[set VMs array]]></display-name>
+    <script encoded="false"><![CDATA[allvms = [];
+
+for each(var res in deploymentResources)
+{
+    if(res.type == 'Cloud.vSphere.Machine')
+    {
+        var vmname = res.properties.resourceName;
+        System.log("vmname: " + vmname);
+        //var tempvms = VcPlugin.getAllVirtualMachines(null, "xpath:name[matches(.,'"+vmname +"')]");
+        tempvms = VcPlugin.getAllVirtualMachines(null, vmname)
+        System.log("found in vc: " + tempvms[0].name);
+        allvms.push(tempvms[0]);
+    }
+	
+}]]></script>
+    <in-binding>
+      <bind name="deploymentResources" type="string" export-name="deploymentResources"/>
+    </in-binding>
+    <out-binding>
+      <bind name="allvms" type="Array/VC:VirtualMachine" export-name="allvms"/>
+    </out-binding>
+    <position y="60.0" x="500.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item3" type="task" script-module="com.ca.vra.restHost/getVRAAuth">
+    <display-name><![CDATA[getVRAAuth]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.ca.vra.restHost").getVRAAuth();
+]]></script>
+    <in-binding/>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="bearer"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.576568105939785" x="157.5344535747568"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item1" type="task" script-module="com.ca.vra.restHost/getDeploymentResourcesByID">
+    <display-name><![CDATA[getDeploymentResourcesByID]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.ca.vra.restHost").getDeploymentResourcesByID(deploymentId, accessToken);
+]]></script>
+    <in-binding>
+      <bind name="deploymentId" type="string" export-name="deploymentID"/>
+      <bind name="accessToken" type="string" export-name="bearer"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="deploymentResources"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="320.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item0" type="task">
+    <display-name><![CDATA[Deployment name]]></display-name>
+    <script encoded="false"><![CDATA[System.log(deploymentResult);
+deploymentName = deploymentResult.name;]]></script>
+    <in-binding>
+      <bind name="deploymentResult" type="string" export-name="deploymentResult"/>
+    </in-binding>
+    <out-binding>
+      <bind name="deploymentName" type="string" export-name="deploymentName"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="760.0"/>
+  </workflow-item>
+  <workflow-item name="item5" out-name="item4" type="task" script-module="com.ca.vra.restHost/getDeployment">
+    <display-name><![CDATA[getDeployment]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.ca.vra.restHost").getDeployment(deploymentId, accessToken);
+]]></script>
+    <in-binding>
+      <bind name="deploymentId" type="string" export-name="deploymentID"/>
+      <bind name="accessToken" type="string" export-name="bearer"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="deploymentResult"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="620.0"/>
+  </workflow-item>
+  <presentation>
+    <p-param name="deploymentID">
+      <desc><![CDATA[deploymentID]]></desc>
+    </p-param>
+  </presentation>
+</workflow>

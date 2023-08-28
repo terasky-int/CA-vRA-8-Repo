@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="returnArrProp_ConfigElement" result-type="Array/Properties" api-version="6.0.0" id="27b48c01-f6e5-4bbd-a2d9-016aba57ee40" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.subscriptions">
+  <script encoded="false"><![CDATA[var jsonString = "[";
+var configCategory = Server.getConfigurationElementCategoryWithPath("TeraSky");
+var configElement = null;
+if (configCategory) {
+    System.log("Found configuration category '" + configCategory.name + "'");
+    var configElements = configCategory.configurationElements;
+    for (var i in configElements) {
+        ce = configElements[i];
+        if (ce.name == "testDepConfig") {
+            configElement = ce;
+            break;
+        }
+    }
+}
+var keys = configElement.attributes
+
+for each(var key in keys)
+{
+    System.log(key.name)
+    jsonString += '{"label":"' + key.name + '","value":"' + key.name + '"},'
+}
+
+jsonString = jsonString.substring(0, jsonString.length - 1);
+jsonString += "]";
+System.log(jsonString);
+
+return JSON.parse(jsonString);]]></script>
+</dunes-script-module>

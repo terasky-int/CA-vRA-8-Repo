@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="5e299890-bb3f-4c61-afed-c5992f04a8d0" version="0.0.0">
+  <display-name><![CDATA[subnetsTest]]></display-name>
+  <atts>
+    <att name="solarsubnet" type="Array/CompositeType(name:string,ip:string,snm:string):networks" read-only="false">
+      <value encoded="n"><![CDATA[[127:CompositeType(name:string,ip:string,snm:string):networks#{3:9:snm=string#24
+2:18:ip=string#10.10.10.10
+4:12:name=string#first
+},128:CompositeType(name:string,ip:string,snm:string):networks#{3:9:snm=string#24
+2:18:ip=string#10.10.20.11
+4:13:name=string#second
+},127:CompositeType(name:string,ip:string,snm:string):networks#{3:9:snm=string#22
+2:18:ip=string#10.20.10.30
+4:12:name=string#third
+}]]]></value>
+    </att>
+  </atts>
+</config-element>

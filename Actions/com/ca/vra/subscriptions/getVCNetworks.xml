@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getVCNetworks" result-type="Array/string" api-version="6.0.0" id="b2854382-4c1f-4445-91b7-8690d01ed87b" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.subscriptions">
+  <script encoded="false"><![CDATA[var networkNames = [];
+
+var getHosts = RESTHostManager.getHosts()
+
+for(var restHostId in getHosts){	
+var restHost = RESTHostManager.getHost(getHosts[restHostId])
+if(restHost.name == "roy-vra"){		
+	MyREST = restHost
+}}
+
+
+var token = System.getModule("com.ca.vra.restHost").LoginTovRA(MyREST, "roy", "Aa123456");
+var uri = "/iaas/api/fabric-networks";
+var request = MyREST.createRequest("GET", uri, null);
+request.setHeader("Authorization" , "Bearer " + token);
+request.setHeader("Content-Type" , "application/json");
+var response = request.execute()
+var statusCode = response.statusCode;
+var statusCodeAttribute = statusCode;
+var statusMessage = response.statusMessage;
+contentAsString = response.contentAsString;
+
+var responseContent =  JSON.parse(contentAsString);
+
+var networks = responseContent.content;
+
+for each(var network in networks)
+{
+     System.log(network.name + " : " + network.id);
+    networkNames.push(network.name);
+        
+   
+}
+
+return networkNames;
+]]></script>
+</dunes-script-module>

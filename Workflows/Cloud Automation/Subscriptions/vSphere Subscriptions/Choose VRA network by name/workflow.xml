@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<workflow xmlns="http://vmware.com/vco/workflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://vmware.com/vco/workflow http://vmware.com/vco/workflow/Workflow-v4.xsd" root-name="item2" object-name="workflow:name=generic" id="26c3f02d-5bf6-481f-88d0-423c65872dfb" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" editor-version="2.0" restartMode="1" resumeFromFailedMode="0">
+  <display-name><![CDATA[Choose VRA network by name]]></display-name>
+  <position y="50.0" x="100.0"/>
+  <input>
+    <param name="inputProperties" type="Properties"/>
+  </input>
+  <output>
+    <param name="networkSelectionIds" type="Array/Array"/>
+  </output>
+  <attrib name="restHost" type="REST:RESTHost" read-only="false" conf-id="e147e593-b897-492b-bf82-d31fc1e22861" conf-key="vraRestHost"/>
+  <attrib name="bearer" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="username" type="string" read-only="false" conf-id="e147e593-b897-492b-bf82-d31fc1e22861" conf-key="username">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="password" type="SecureString" read-only="false" conf-id="e147e593-b897-492b-bf82-d31fc1e22861" conf-key="password"/>
+  <attrib name="networkName" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="networkId" type="string" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <attrib name="vmsCount" type="number" read-only="false">
+    <value encoded="n"><![CDATA[]]></value>
+  </attrib>
+  <workflow-item name="item0" type="end" end-mode="0">
+    <in-binding/>
+    <position y="50.0" x="800.0"/>
+  </workflow-item>
+  <workflow-item name="item1" out-name="item3" type="task">
+    <display-name><![CDATA[Choose VRA network by name]]></display-name>
+    <script encoded="false"><![CDATA[var uri = "/iaas/api/fabric-networks";
+var request = vraRESTHost.createRequest("GET", uri, null);
+request.setHeader("Authorization" , "Bearer " + bearer);
+request.setHeader("Content-Type" , "application/json");
+var response = request.execute()
+var statusCode = response.statusCode;
+var statusCodeAttribute = statusCode;
+var statusMessage = response.statusMessage;
+contentAsString = response.contentAsString;
+
+//System.log(contentAsString);
+
+
+var responseContent =  JSON.parse(contentAsString);
+
+var networks = responseContent.content;
+
+for each(var network in networks)
+{
+    if(network.name == networkName)
+   {
+        System.log(network.name + " : " + network.id);
+        networkId = network.id;
+   }
+}
+]]></script>
+    <in-binding>
+      <bind name="vraRESTHost" type="REST:RESTHost" export-name="restHost"/>
+      <bind name="bearer" type="string" export-name="bearer"/>
+      <bind name="networkName" type="string" export-name="networkName"/>
+    </in-binding>
+    <out-binding>
+      <bind name="networkId" type="string" export-name="networkId"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="380.0"/>
+  </workflow-item>
+  <workflow-item name="item2" out-name="item4" type="task" script-module="com.ca.vra.restHost/LoginTovRA">
+    <display-name><![CDATA[LoginTovRA]]></display-name>
+    <script encoded="false"><![CDATA[//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.ca.vra.restHost").LoginTovRA(vRA, username, password);
+]]></script>
+    <in-binding>
+      <bind name="vRA" type="REST:RESTHost" export-name="restHost"/>
+      <bind name="username" type="string" export-name="username"/>
+      <bind name="password" type="SecureString" export-name="password"/>
+    </in-binding>
+    <out-binding>
+      <bind name="actionResult" type="string" export-name="bearer"/>
+    </out-binding>
+    <description><![CDATA[Add a note to the workflow schema.]]></description>
+    <position y="60.0" x="180.0"/>
+  </workflow-item>
+  <workflow-item name="item3" out-name="item0" type="task">
+    <display-name><![CDATA[Assign network]]></display-name>
+    <script encoded="false"><![CDATA[networkSelectionIds = new Array();
+for(var i = 0; i < vmsCount; i ++)
+{
+    var midArray = new Array();
+    var innerArray = new Array();
+    innerArray[0] = networkId;
+    midArray.push(innerArray);
+    networkSelectionIds[i] = midArray;
+}
+
+]]></script>
+    <in-binding>
+      <bind name="networkId" type="string" export-name="networkId"/>
+      <bind name="vmsCount" type="number" export-name="vmsCount"/>
+    </in-binding>
+    <out-binding>
+      <bind name="networkSelectionIds" type="Array/Array" export-name="networkSelectionIds"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="580.0"/>
+  </workflow-item>
+  <workflow-item name="item4" out-name="item1" type="task">
+    <display-name><![CDATA[get Network name]]></display-name>
+    <script encoded="false"><![CDATA[networkName = inputProperties.customProperties.networkName;
+vmsCount = inputProperties.customProperties.count;]]></script>
+    <in-binding>
+      <bind name="inputProperties" type="Properties" export-name="inputProperties"/>
+    </in-binding>
+    <out-binding>
+      <bind name="networkName" type="string" export-name="networkName"/>
+      <bind name="vmsCount" type="number" export-name="vmsCount"/>
+    </out-binding>
+    <description><![CDATA[Simple task with custom script capability.]]></description>
+    <position y="60.0" x="260.0"/>
+  </workflow-item>
+  <presentation>
+    <p-param name="inputProperties">
+      <desc><![CDATA[inputProperties]]></desc>
+    </p-param>
+  </presentation>
+</workflow>

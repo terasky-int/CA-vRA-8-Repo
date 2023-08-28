@@ -1,0 +1,1 @@
+{"schema":{"env":{"id":"env","type":{"dataType":"string"},"label":"env","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_onwmncp2","title":"General","sections":[{"id":"section_oscir8n3","fields":[{"id":"env","display":"textField","signpostPosition":"right-middle","state":{"visible":true,"read-only":false}}]}]}]},"itemId":""}
