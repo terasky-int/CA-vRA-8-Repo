@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<config-element id="fb155c55-91b6-4b70-98c6-e45764ff6534" version="0.0.0">
+  <display-name><![CDATA[Email Config]]></display-name>
+  <atts>
+    <att name="password" type="SecureString" read-only="false"/>
+  </atts>
+</config-element>

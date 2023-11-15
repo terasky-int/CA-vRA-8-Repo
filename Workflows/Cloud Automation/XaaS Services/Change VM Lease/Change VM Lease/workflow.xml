@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item3" object-name="workflow:name=generic" id="8f8522db-2a4c-45be-be5e-17d38f871e3a" editor-version="2.0" version="1.0.1" api-version="6.0.0" allowed-operations="vfe" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Change VM Lease</display-name>
+    <position y="50.0" x="20.0"/>
+    <input>
+        <param name="vmOwner" type="string"/>
+        <param name="vmName" type="string"/>
+        <param name="changeLeaseBy" type="string"/>
+        <param name="leaseExpireDate" type="string"/>
+    </input>
+    <output/>
+    <attrib name="vm" type="VC:VirtualMachine">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="deploymentID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="vmTags" type="Array/Properties">
+        <value encoded="n">[]</value>
+    </attrib>
+    <attrib name="resourceID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="maximumLeaseDate" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="extendLeaseRequestID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="updateTagRequestID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="extendLeaseTo" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="leaseStatus" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="leaseRequestDetails" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="smtpHost" type="string">
+        <value encoded="n">192.168.2.3</value>
+    </attrib>
+    <attrib name="smtpPort" type="number">
+        <value encoded="n">25.0</value>
+    </attrib>
+    <attrib name="username" type="string">
+        <value encoded="n">vReazlie@cellebrite.com</value>
+    </attrib>
+    <attrib name="password" type="SecureString">
+        <value encoded="n">8BQ51W77O65R31Z32K33X21I21IFA76110QFA1B9A2RDFF24F6Q1485DA9TBB999A3J95B91EO9D475BEGE1A67B6M43C6DBFTD20A2FCG6CFECF8G1CCC80V1C5676FH26F4861J70F8CB4HE91CA85UFCDE7FCM7221CA9GACCFDC3X3AE87A1I351BB30HF186DEFQ1ED0F7EG6744A0EK</value>
+    </attrib>
+    <attrib name="fromName" type="string">
+        <value encoded="n">Cellebrite Automation</value>
+    </attrib>
+    <attrib name="fromAddress" type="string">
+        <value encoded="n">vReazlie@cellebrite.com</value>
+    </attrib>
+    <attrib name="toAddress" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="subject" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="content" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="useSsl" type="boolean">
+        <value encoded="n">false</value>
+    </attrib>
+    <attrib name="useStartTls" type="boolean">
+        <value encoded="n">false</value>
+    </attrib>
+    <attrib name="requester" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="ADHost" type="AD:AdHost">
+        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='%23_v2_%23%2C%23RootItem%23%2C%23368907ff-fc46-47e2-a6f4-b44b444268c9%23'&amp;dunesName='AD:AdHost'</value>
+    </attrib>
+    <attrib name="headLine" type="string">
+        <value encoded="n">Change VM Lease</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="270.0" x="700.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item10" type="task" comparator="0">
+        <display-name>Update Lease Tags</display-name>
+        <script encoded="false">var value = changeLeaseBy.split(" ")[0]
+System.log(value)
+
+var foundLeaseTags = false
+
+System.log("Old vm tags: " + JSON.stringify(vmTags))
+for each (tag in vmTags){
+    if (tag.key == "Lease"){
+        tag.value = value
+        foundLeaseTags = true
+    }
+}
+
+//In cases when a virtual machine was boarded to vRA and doesnt have lease tag
+if (!foundLeaseTags)
+{
+    var newTag = {
+        "Lease":value,
+    }
+    vmTags.push(newTag)
+    System.log('vmTag is ' + JSON.stringify(vmTags))
+}
+
+System.log("New vm tags: " + JSON.stringify(vmTags))
+
+var body = {
+    "actionId": "Cloud.vSphere.Machine.Update.Tags",
+    "inputs":{
+        "tags": vmTags
+    },
+    "reason":"Extend Lease"
+}
+
+System.log("Body request is: " + JSON.stringify(body))
+
+var pathUri = '/deployment/api/deployments/'+ deploymentID +'/resources/' + resourceID + '/requests'
+
+var content = System.getModule("com.ca.vra.host").vraPostOperation(pathUri, JSON.stringify(body))
+content = JSON.parse(content)
+if (content.statusCode == '400')
+{
+    throw ("Cant update tags, error " + JSON.stringify(content))
+}
+else
+{
+    System.log(JSON.stringify(content))
+    updateTagRequestID = content.id   
+}
+</script>
+        <in-binding>
+            <bind name="changeLeaseBy" type="string" export-name="changeLeaseBy"/>
+            <bind name="deploymentID" type="string" export-name="deploymentID"/>
+            <bind name="vmTags" type="Array/Properties" export-name="vmTags"/>
+            <bind name="resourceID" type="string" export-name="resourceID"/>
+        </in-binding>
+        <out-binding>
+            <bind name="updateTagRequestID" type="string" export-name="updateTagRequestID"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="130.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item8" type="task" comparator="0">
+        <display-name>Find Deployment ID</display-name>
+        <script encoded="false">var pathUri = '/deployment/api/deployments?search=' + vmName + '&amp;ownedBy=' + vmOwner//.accountName
+var content = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+content = JSON.parse(content)
+
+//deploymentID = content.content[0].id
+
+
+for each (deployment in content.content)
+{
+    deploymentID = deployment.id
+    System.log(deploymentID)
+    var pathUri = '/deployment/api/deployments/' + deploymentID + '/resources'
+    var content = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+    content = JSON.parse(content)
+    for each(resource in content.content)
+    {
+        if (resource.type == "Cloud.vSphere.Machine")
+        {
+            if(resource.properties.resourceName == vmName)
+            {
+                resourceID = resource.id;
+                vmTags = resource.properties.tags;
+                System.log("Found resourceID " + resourceID + " And tags " + JSON.stringify(vmTags))
+
+                break;
+            }
+        }
+    }
+}</script>
+        <in-binding>
+            <bind name="vmName" type="string" export-name="vmName"/>
+            <bind name="vmOwner" type="string" export-name="vmOwner"/>
+        </in-binding>
+        <out-binding>
+            <bind name="vmTags" type="Array/Properties" export-name="vmTags"/>
+            <bind name="resourceID" type="string" export-name="resourceID"/>
+            <bind name="deploymentID" type="string" export-name="deploymentID"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="100.0"/>
+    </workflow-item>
+    <workflow-item name="item6" out-name="item9" type="task" comparator="0">
+        <display-name>Extend Lease</display-name>
+        <script encoded="false">requester = System.getContext().getParameter('__metadata_userName')
+
+//Retrieve Maximum lease date
+
+var pathUri = '/deployment/api/deployments/' + deploymentID + '/actions/Deployment.ChangeLease'
+var content = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+content = JSON.parse(content)
+var description = content.schema.properties['Lease Expiration Date'].description
+maximumLeaseDate = content.schema.properties["Lease Expiration Date"].formatMaximum
+var deploymentExpiresIn = content.schema.properties['Deployment expires in']['default']
+
+//Body for post request
+
+if (changeLeaseBy == 'infinite')
+{
+    extendLeaseTo = ""
+    var body = {
+    "actionId": "Deployment.ChangeLease",
+    "inputs": {
+        "Deployment expires in": deploymentExpiresIn,
+        "Reason": "Request by " + requester + ", to change vm " + vmName + " lease to " + changeLeaseBy 
+        //"Lease Expiration Date": extendLeaseTo
+        },
+    }
+
+}
+else
+{ 
+    maximumLeaseDate.replace("Z",".00Z")
+    extendLeaseTo = System.getModule(com.ca.vra.calculate).calculateNewVmLeaseDate(maximumLeaseDate)
+    //Add extend date to body
+    var body = {
+    "actionId": "Deployment.ChangeLease",
+    "inputs": { 
+            "Deployment expires in": deploymentExpiresIn,
+            "Lease Expiration Date": extendLeaseTo
+        },
+    }
+}
+
+
+System.log(JSON.stringify(body))
+
+var pathUri = '/deployment/api/deployments/' + deploymentID + '/requests'
+var content = System.getModule("com.ca.vra.host").vraPostOperation(pathUri, JSON.stringify(body))
+content = JSON.parse(content)
+System.log("New lease (Extend post request)? : " + JSON.stringify(content))
+
+extendLeaseRequestID = content.id
+
+
+</script>
+        <in-binding>
+            <bind name="deploymentID" type="string" export-name="deploymentID"/>
+            <bind name="changeLeaseBy" type="string" export-name="changeLeaseBy"/>
+            <bind name="vmName" type="string" export-name="vmName"/>
+            <bind name="extendLeaseTo" type="string" export-name="extendLeaseTo"/>
+        </in-binding>
+        <out-binding>
+            <bind name="extendLeaseRequestID" type="string" export-name="extendLeaseRequestID"/>
+            <bind name="maximumLeaseDate" type="string" export-name="maximumLeaseDate"/>
+            <bind name="extendLeaseTo" type="string" export-name="extendLeaseTo"/>
+            <bind name="requester" type="string" export-name="requester"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="500.0"/>
+    </workflow-item>
+    <workflow-item name="item8" out-name="item2" alt-out-name="item6" type="custom-condition" comparator="0">
+        <display-name>Update Lease tags ?</display-name>
+        <script encoded="false">for each (tag in vmTags){
+    if (tag.key == "Lease"){
+        if (tag.value == changeLeaseBy.split(" ")[0]){
+            System.log("No need to change tag, just extend lease")
+            return false
+        }else{
+            return true
+        }
+    }
+}</script>
+        <in-binding>
+            <bind name="vmTags" type="Array/Properties" export-name="vmTags"/>
+            <bind name="changeLeaseBy" type="string" export-name="changeLeaseBy"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="50.0" x="300.0"/>
+    </workflow-item>
+    <workflow-item name="item9" out-name="item12" type="task" comparator="0">
+        <display-name>Lease Deployment finished?</display-name>
+        <script encoded="false">
+
+var newLeaseStatus = false
+
+while (!newLeaseStatus)
+{
+    System.sleep(10000)
+    //var pathUri = '/deployment/api/deployments/' + deploymentID + '/actions/Deployment.ChangeLease'
+    var pathUri = '/deployment/api/deployments/' + deploymentID + '/requests'
+    var content = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+    content = JSON.parse(content)
+    for each (var request in content.content)
+    {
+        if (request.id == extendLeaseRequestID)
+        {
+
+            leaseStatus = request.status;
+            leaseRequestDetails = request.details
+            switch(leaseStatus)
+            {
+                case ('APPROVAL_REJECTED'):
+                newLeaseStatus = true;
+                break
+                case ('FAILED'):
+                    System.log("Request failed, logs are: " + request.details);
+                    throw ("Request failed, logs are: " + request.details);
+                    newLeaseStatus = true;
+                    break;
+                case ('SUCCESSFUL'):
+                    System.log("Lease request status is: " + request.status)
+                    newLeaseStatus = true;
+                    break
+            }
+        }
+        else
+        {
+            System.log("Skip")
+        }
+    }
+}
+
+
+</script>
+        <in-binding>
+            <bind name="deploymentID" type="string" export-name="deploymentID"/>
+            <bind name="extendLeaseRequestID" type="string" export-name="extendLeaseRequestID"/>
+            <bind name="maximumLeaseDate" type="string" export-name="maximumLeaseDate"/>
+        </in-binding>
+        <out-binding>
+            <bind name="leaseStatus" type="string" export-name="leaseStatus"/>
+            <bind name="leaseRequestDetails" type="string" export-name="leaseRequestDetails"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="660.0"/>
+    </workflow-item>
+    <workflow-item name="item10" out-name="item6" type="task" comparator="0">
+        <display-name>Tag Lease updated?</display-name>
+        <script encoded="false">var newTagApplied = false
+
+
+while (!newTagApplied)
+{
+    System.sleep(30000)
+    var pathUri = '/deployment/api/deployments/' + deploymentID + '/requests'
+    var content = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+    content = JSON.parse(content)
+    for each (var request in content.content)
+    {
+        if (request.id == updateTagRequestID)
+        {
+            status = request.status;
+            switch(status)
+            {
+                case ('APPROVAL_REJECTED'):
+                case ('FAILED'):
+                    System.log("Request failed, logs are: " + request.details);
+                    throw ("Request failed, logs are: " + request.details);
+                    newTagApplied = true;
+                    break;
+                case ('SUCCESSFUL'):
+                    System.log("Lease request status is: " + request.status)
+                    newTagApplied = true;
+                    break
+                case ('PENDING'):
+                    System.log("Lease request status is: " + request.status)
+                    break
+            }   
+        }
+        else
+        {
+            System.log("Skip")
+        }
+    }
+}
+</script>
+        <in-binding>
+            <bind name="vmTags" type="Array/Properties" export-name="vmTags"/>
+            <bind name="deploymentID" type="string" export-name="deploymentID"/>
+            <bind name="changeLeaseBy" type="string" export-name="changeLeaseBy"/>
+            <bind name="updateTagRequestID" type="string" export-name="updateTagRequestID"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="130.0" x="500.0"/>
+    </workflow-item>
+    <workflow-item name="item11" out-name="item0" type="link" linked-workflow-id="5a384575-0fef-4651-b30b-14d41dcdf846" comparator="0">
+        <display-name>Send Mail</display-name>
+        <in-binding>
+            <bind name="initialContent" type="string" export-name="content"/>
+            <bind name="headLine" type="string" export-name="headLine"/>
+            <bind name="toAddress" type="string" export-name="toAddress">
+                <description>Destination address</description>
+            </bind>
+            <bind name="subject" type="string" export-name="subject">
+                <description>Email subject</description>
+            </bind>
+        </in-binding>
+        <out-binding/>
+        <description> </description>
+        <position y="210.0" x="660.0"/>
+    </workflow-item>
+    <workflow-item name="item12" out-name="item11" type="task" comparator="0">
+        <display-name>Set Email Content</display-name>
+        <script encoded="false">
+//retrieve user's AD:USER variable using built-int vRO functions.
+var users = ActiveDirectory.search("User",requester,ADHost);
+for each(var tmpuser in users){
+    if(requester == tmpuser.getAttribute("mail"))
+    {
+        var user = tmpuser;
+    }
+}
+
+var userMail = user.getAttribute("mail");
+var userDisplayName = user.getAttribute("displayName")
+
+
+
+//Define requester
+toAddress = userMail + ",ITSystemInfra@cellebrite.com"
+
+//Define content
+content = "";
+// content += "&lt;br&gt;&lt;br&gt;"
+// content += '&lt;img src="data:image/png;base64,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"&gt;'
+// content += "&lt;/br&gt;"
+// content += "&lt;/br&gt;"
+content += "&lt;/br&gt;"
+content += "&lt;b&gt;Hello " + requester + ",&lt;/b&gt;&lt;/br&gt;"
+content += "&lt;/br&gt;"
+content += "The request to extend Virtual machine  " + vmName + " lease to " + changeLeaseBy
+content += "&lt;/br&gt;"
+if (leaseStatus == 'APPROVAL_REJECTED')
+{
+    content += "was rejected, rejection details are: " + leaseRequestDetails + "&lt;/br&gt;&lt;/br&gt;"
+    subject = "Change VM Lease Rejected"
+}
+else if (leaseStatus == 'SUCCESSFUL')
+{
+    content += "completed successfully &lt;/br&gt;&lt;/br&gt;"
+    subject = "Change VM Lease Approved"
+}
+content += "&lt;/br&gt;"
+// content += "Best regards,&lt;/br&gt;&lt;/b&gt;"
+// content += "IT@Cellebrite&lt;/br&gt;&lt;/b&gt;"
+// content += "&lt;/br&gt;"
+// content += "&lt;/br&gt;"
+</script>
+        <in-binding>
+            <bind name="leaseRequestDetails" type="string" export-name="leaseRequestDetails"/>
+            <bind name="leaseStatus" type="string" export-name="leaseStatus"/>
+            <bind name="requester" type="string" export-name="requester"/>
+            <bind name="ADHost" type="AD:AdHost" export-name="ADHost"/>
+            <bind name="changeLeaseBy" type="string" export-name="changeLeaseBy"/>
+            <bind name="vmName" type="string" export-name="vmName"/>
+        </in-binding>
+        <out-binding>
+            <bind name="content" type="string" export-name="content"/>
+            <bind name="toAddress" type="string" export-name="toAddress"/>
+            <bind name="subject" type="string" export-name="subject"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="140.0" x="660.0"/>
+    </workflow-item>
+</ns2:workflow>

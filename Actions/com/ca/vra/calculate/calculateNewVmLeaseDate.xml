@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="calculateNewVmLeaseDate" result-type="string" api-version="6.0.0" id="a5c9fba1-dab1-4549-91a1-837dfb51fef2" version="0.0.0" category-name="com.ca.vra.calculate">
+  <param n="maximumLeaseDate" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[if (!maximumLeaseDate)
+{
+    return null
+}
+
+//We trim spaces and etc.
+var dateStr = maximumLeaseDate;
+dateStr = dateStr.trim();
+
+//Split the date string into its components
+var year = dateStr.slice(0, 4);
+var month = dateStr.slice(5, 7);
+var day = dateStr.slice(8, 10);
+var hour = dateStr.slice(11, 13);
+var minute = dateStr.slice(14, 16);
+var second = dateStr.slice(17, 19);
+
+System.log("Sliced date is: " + year + " " + month + " " + day + " " + hour + " " + minute + " " + second)
+
+//Create a new date object with the components, we subtract month - 1 because date function expects rang 0-11 
+var date = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+System.log("New Date object is: " + date)
+
+//Subtract 30 minutes from the date
+date.setMinutes(date.getMinutes() - 30);
+
+//Format the new date string
+var newDateStr = date.getUTCFullYear() + '-' +
+                 padZero(date.getUTCMonth() + 1) + '-' +
+                 padZero(date.getUTCDate()) + 'T' +
+                 padZero(date.getUTCHours()) + ':' +
+                 padZero(date.getUTCMinutes()) + ':' +
+                 padZero(date.getUTCSeconds()) + 'Z';
+
+System.log(newDateStr);
+
+function padZero(num) {
+    System.log(num)
+    // Add a leading zero if the number is less than 10
+    return (num < 10 ? '0' : '') + num;
+}
+
+return newDateStr
+]]></script>
+</dunes-script-module>

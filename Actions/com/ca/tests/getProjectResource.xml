@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getProjectResource" result-type="Array/Properties" api-version="6.0.0" id="f1a724ac-3aa6-4679-aa15-6b4d5782e723" version="0.0.0" category-name="com.ca.tests">
+  <param n="project" t="string"/>
+  <script encoded="false"><![CDATA[return [
+        {
+            projectName: project,
+            projectCpuAlloc: 100,
+            projectMemAlloc: 100,
+            projectStorageAlloc: 100,
+            projectCpuUsed: 1,
+            projectMemUsed: 2,
+            projectStorageUsed: 20
+        }
+    ]]]></script>
+</dunes-script-module>

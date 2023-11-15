@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item4" object-name="workflow:name=generic" id="2e1ab593-deda-4891-b190-4b21424d9c6b" editor-version="1.6" version="0.0.1" api-version="6.0.0" allowed-operations="vfe" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Add CPU to VM</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="vcvm" type="VC:VirtualMachine"/>
+        <param name="cpu" type="string"/>
+    </input>
+    <output/>
+    <attrib name="deploymentID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="coreCount" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="resourceId" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="totalMemoryMB" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <attrib name="requestUpdateID" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="680.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item5" type="task" comparator="0">
+        <display-name>Execute Request</display-name>
+        <script encoded="false">var pathUri = '/deployment/api/deployments/' + deploymentID + '/resources/' + resourceId + '/requests'
+
+var body = {
+    "actionId": "Cloud.vSphere.Machine.Resize",
+    "reason": "Resize",
+    "inputs": {
+       "cpuCount": cpu,
+       "cpuCore": coreCount,
+       "totalMemoryMB": totalMemoryMB,
+    }
+}
+
+var content = System.getModule("com.ca.vra.host").vraPostOperation(pathUri,JSON.stringify(body))
+content = JSON.parse(content)
+
+if (content.statusCode == '400')
+{
+    throw ("Cant update CPU, " + JSON.stringify(content))
+}
+else
+{
+    System.log(JSON.stringify(content))
+    requestUpdateID = content.id   
+}
+
+</script>
+        <in-binding>
+            <bind name="deploymentID" type="string" export-name="deploymentID"/>
+            <bind name="coreCount" type="string" export-name="coreCount"/>
+            <bind name="resourceId" type="string" export-name="resourceId"/>
+            <bind name="cpu" type="string" export-name="cpu"/>
+            <bind name="totalMemoryMB" type="string" export-name="totalMemoryMB"/>
+        </in-binding>
+        <out-binding>
+            <bind name="requestUpdateID" type="string" export-name="requestUpdateID"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="360.0"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item3" type="task" comparator="0">
+        <display-name>Retrieve Deployment ID</display-name>
+        <script encoded="false">var pathUri = '/deployment/api/deployments?search=' + vcvm.name
+var content = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+content = JSON.parse(content)
+
+for each (deployment in content.content)
+{
+    deploymentID = deployment.id
+    System.log(deploymentID)
+    var pathUri = '/deployment/api/deployments/' + deploymentID + '/resources'
+    var content = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+    content = JSON.parse(content)
+    for each(resource in content.content)
+    {
+        if (resource.type == "Cloud.vSphere.Machine")
+        {
+            if(resource.properties.resourceName == vcvm.name)
+            {
+                deploymentID = deployment.id
+                coreCount = resource.properties.coreCount
+                resourceId = resource.properties.resourceId
+                totalMemoryMB = resource.properties.totalMemoryMB
+                break;
+            }
+        }
+    }
+}</script>
+        <in-binding>
+            <bind name="vcvm" type="VC:VirtualMachine" export-name="vcvm"/>
+        </in-binding>
+        <out-binding>
+            <bind name="deploymentID" type="string" export-name="deploymentID"/>
+            <bind name="coreCount" type="string" export-name="coreCount"/>
+            <bind name="resourceId" type="string" export-name="resourceId"/>
+            <bind name="totalMemoryMB" type="string" export-name="totalMemoryMB"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="220.0"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item0" type="task" comparator="0">
+        <display-name>Resize Completed ?</display-name>
+        <script encoded="false">
+
+var newCpuUpdated = false
+
+while (!newCpuUpdated)
+{
+    System.sleep(10000)
+    var pathUri = '/deployment/api/requests/' + requestUpdateID
+    var content = System.getModule("com.ca.vra.host").vraGetOperation(pathUri)
+    var request = JSON.parse(content)
+    if (request.id == requestUpdateID)
+    {
+        var requestStatus = request.status;
+        switch(requestStatus)
+        {
+            case ('APPROVAL_REJECTED'):
+                newCpuUpdated  = true;
+                break
+            case ('CHECKING_APPROVAL'):
+                System.sleep(10000)
+                break
+            case ('FAILED'):
+                System.log("Request failed, logs are: " + request.details);
+                throw ("Request failed, logs are: " + request.details);
+                newCpuUpdated  = true;
+                break;
+            case ('SUCCESSFUL'):
+                System.log("Lease request status is: " + request.status)
+                newCpuUpdated  = true;
+                break
+        }
+    }
+}
+
+
+
+</script>
+        <in-binding>
+            <bind name="deploymentID" type="string" export-name="deploymentID"/>
+            <bind name="requestUpdateID" type="string" export-name="requestUpdateID"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="500.0"/>
+    </workflow-item>
+</ns2:workflow>

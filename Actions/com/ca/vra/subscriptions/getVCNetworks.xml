@@ -6,12 +6,12 @@ var getHosts = RESTHostManager.getHosts()
 
 for(var restHostId in getHosts){	
 var restHost = RESTHostManager.getHost(getHosts[restHostId])
-if(restHost.name == "roy-vra"){		
-	MyREST = restHost
+if(restHost.name == "vRA Host"){		
+	myREST = restHost
 }}
 
 
-var token = System.getModule("com.ca.vra.restHost").LoginTovRA(MyREST, "roy", "Aa123456");
+var token = System.getModule("com.ca.vra.restHost").LoginTovRA(myREST, "olga", "Aa123456");
 var uri = "/iaas/api/fabric-networks";
 var request = MyREST.createRequest("GET", uri, null);
 request.setHeader("Authorization" , "Bearer " + token);

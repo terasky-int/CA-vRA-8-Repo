@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="deddeb75-ee11-4b9c-84d0-b959ce571bf1" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Olga Get Update certificate</display-name>
+    <position y="50.0" x="100.0"/>
+    <input/>
+    <output/>
+    <attrib name="vs_object" type="Avi:VirtualService">
+        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='OlgaTest(virtualservice-cfcaafe1-a880-4a9f-aac0-134f739c5043)'&amp;dunesName='Avi:VirtualService'</value>
+    </attrib>
+    <attrib name="controller" type="string">
+        <value encoded="n">172.16.26.170-admin</value>
+    </attrib>
+    <attrib name="actionResult" type="Avi:WorkflowRuntime">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="SSLCertificate" type="string">
+        <value encoded="n">System-Default-Cert</value>
+    </attrib>
+    <attrib name="SSLCert" type="boolean">
+        <value encoded="n">true</value>
+    </attrib>
+    <attrib name="CertName" type="string">
+        <value encoded="n">System-Defau;t-Cert-EC</value>
+    </attrib>
+    <attrib name="CreateSSL" type="boolean">
+        <value encoded="n">true</value>
+    </attrib>
+    <attrib name="actionResult_1" type="Any">
+        <value encoded="n"/>
+    </attrib>
+    <attrib name="aviClient" type="Avi:AviVroClient">
+        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='172.16.26.170-admin'&amp;dunesName='Avi:AviVroClient'</value>
+    </attrib>
+    <attrib name="objectType" type="string">
+        <value encoded="n">virtualservice</value>
+    </attrib>
+    <attrib name="vsList" type="Array/string">
+        <value encoded="n"/>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="900.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item2" type="task" script-module="com.vmware.avi/initVroWorkflow" comparator="0">
+        <display-name>initVroWorkflow</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.avi").initVroWorkflow(controller);
+</script>
+        <in-binding>
+            <bind name="controller" type="string" export-name="controller">
+                <description>Controller IP</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Avi:WorkflowRuntime" export-name="actionResult"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="180.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item4" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">&#13;
+var hasCertif = [];&#13;
+    &#13;
+    &#13;
+    var url=vs_object.getUrl();&#13;
+    var controller=url.substring(url.indexOf("//")+2, url.indexOf("/api"));&#13;
+&#13;
+&#13;
+    &#13;
+    var aviVroClient=null;&#13;
+    vroClientArray=Server.findAllForType('Avi:AviVroClient','');&#13;
+    for each(vroClient in vroClientArray){&#13;
+        if(vroClient !=null){&#13;
+            vroController=vroClient.cred.controller;&#13;
+            if(vroController==controller){&#13;
+                aviVroClient=vroClient;&#13;
+            }&#13;
+        }	&#13;
+    }&#13;
+  	&#13;
+        if(aviVroClient!=null)&#13;
+        {&#13;
+          System.log("ok..." )&#13;
+&#13;
+        var response = aviVroClient.getObjectDataByName("sslkeyandcertificate","System-Default-Cert-EC");&#13;
+      //  System.log(response)&#13;
+        var objectData = JSON.parse(response);&#13;
+        var certURL = objectData.url;&#13;
+        System.log("URL: " + objectData.url)&#13;
+&#13;
+          var objs = aviVroClient.getObject("virtualservice");&#13;
+            for each(var obj in objs)&#13;
+            {&#13;
+            &#13;
+                var certs = obj.getSslKeyAndCertificateRefs()&#13;
+                for each(var cer in certs)&#13;
+&#13;
+                    {&#13;
+                     // if(cer.indexOf("System-Default-Cert-EC") &gt; -1)&#13;
+                        if(certURL.indexOf(cer) &gt; -1)&#13;
+                        {&#13;
+                            hasCertif.push(obj)&#13;
+                        }&#13;
+                    }&#13;
+&#13;
+            }&#13;
+        }&#13;
+    &#13;
+    for each(var objWithCer in hasCertif)&#13;
+    {&#13;
+        System.log(objWithCer.name)&#13;
+    }</script>
+        <in-binding>
+            <bind name="vs_object" type="Avi:VirtualService" export-name="vs_object"/>
+            <bind name="controller" type="string" export-name="controller"/>
+            <bind name="actionResult" type="Avi:WorkflowRuntime" export-name="actionResult"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="460.0"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item0" type="task" comparator="0">
+        <display-name>Insert reconfigure virtual service workflow here</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="660.0"/>
+    </workflow-item>
+</ns2:workflow>

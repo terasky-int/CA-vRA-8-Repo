@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="powerOnVM" result-type="string" api-version="6.0.0" id="68be2e18-78ff-4057-aede-08b5ac00d4bc" version="0.0.0" allowed-operations="vfe" category-name="com.ca.vra.deployment.actions">
+  <param n="resourceId" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[//var pathUri = '/deployment/api/deployments/' + deploymentID + '/resources/' + resourceId
+var pathUri = '/deployment/api/resources/' + resourceId + '/requests'
+var body = {
+    "actionId": "Cloud.vSphere.Machine.PowerOn",
+    "reason": "Power on",
+}
+
+var content = System.getModule("org.company.cellebrite.calc").vRAPostOperation(pathUri, JSON.stringify(body))
+content = JSON.parse(content)
+
+return content]]></script>
+</dunes-script-module>

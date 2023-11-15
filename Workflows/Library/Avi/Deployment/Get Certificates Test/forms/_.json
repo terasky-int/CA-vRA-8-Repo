@@ -1,0 +1,1 @@
+{"schema":{"certificateName":{"type":{"dataType":"string","isMultiple":false},"label":"certificateName","id":"certificateName","constraints":{}}},"layout":{"pages":[{"id":"page_1","title":"General","sections":[{"id":"section_2","fields":[{"id":"certificateName","display":"textField"}]}]}]},"itemId":""}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item0" object-name="workflow:name=generic" id="ebb77d22-517d-4f88-aedd-514eed0db027" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Get Project Resources</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="projectName" type="string"/>
+        <param name="projectMemAlloc" type="string"/>
+        <param name="projectCpuAlloc" type="string"/>
+        <param name="projectStorageAlloc" type="string"/>
+        <param name="projectCpuUsed" type="string"/>
+        <param name="projectMemUsed" type="string"/>
+        <param name="projectStorageUsed" type="string"/>
+    </input>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="240.0"/>
+    </workflow-item>
+</ns2:workflow>

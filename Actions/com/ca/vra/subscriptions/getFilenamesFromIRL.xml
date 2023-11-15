@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getFilenamesFromIRL" result-type="Array/string" api-version="6.0.0" id="8c6775cc-99e3-4295-86f9-700f1561eff8" version="0.0.0" category-name="com.ca.vra.subscriptions">
+  <script encoded="false"><![CDATA[var website = new URL("http://172.16.56.201/");
+var ovaFiles = [];
+
+var content = website.getContent();
+
+System.log(content);
+
+var arrayOfLines = content.match(/[^\r\n]+/g);
+//System.log(arrayOfLines.length)
+
+for each(var lineNum=0; lineNum < arrayOfLines.length; lineNum ++)
+{
+    if(arrayOfLines[lineNum].indexOf(".ova") > -1)
+    {
+        var ovaName = arrayOfLines[lineNum].substring(arrayOfLines[lineNum].indexOf(">") + 1, arrayOfLines[lineNum].lastIndexOf("<"));
+        //System.log(arrayOfLines[lineNum])
+        System.log(ovaName);
+        ovaFiles.push(ovaName);
+    }
+    
+}
+return ovaFiles;]]></script>
+</dunes-script-module>

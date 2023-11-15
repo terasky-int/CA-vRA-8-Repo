@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item13" object-name="workflow:name=generic" id="460b83bc-a0f5-47d4-8080-12e561386037" editor-version="2.0" version="0.0.0" api-version="6.0.0" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Resize VM with SNOW flow</display-name>
+    <position y="100.0" x="60.0"/>
+    <input>
+        <param name="vcVm" type="VC:VirtualMachine"/>
+    </input>
+    <output/>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="100.0" x="1400.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item4" type="task" comparator="0">
+        <display-name>Authenticate SNOW</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="107.5" x="660.0"/>
+    </workflow-item>
+    <workflow-item name="item2" out-name="item1" type="task" comparator="0">
+        <display-name>Retrieve VM Resizing Information from Aria Operations</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="107.5" x="530.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item2" type="task" comparator="0">
+        <display-name>Authenticate Aria Operations</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="107.5" x="400.0"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item5" type="task" comparator="0">
+        <display-name>Create SNOW Ticket and update CE</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="107.5" x="790.0"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item7" type="task" comparator="0">
+        <display-name>Get SNOW Ticket status</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="107.5" x="920.0"/>
+    </workflow-item>
+    <workflow-item name="item7" out-name="item10" alt-out-name="item9" type="custom-condition" comparator="0">
+        <display-name>Decision</display-name>
+        <script encoded="false">return true;</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="100.0" x="1060.0"/>
+    </workflow-item>
+    <workflow-item name="item8" out-name="item5" type="task" prototype-id="sleep" content-mode="x" comparator="0">
+        <display-name>Sleep</display-name>
+        <script encoded="false">//Auto-generated script
+if ( sleepTime !== null )  {
+	System.sleep(sleepTime * 1000);
+}else  {
+	throw "'sleepTime' is NULL"; 
+}</script>
+        <in-binding>
+            <bind name="sleepTime" type="number">
+                <description>Time to sleep in seconds</description>
+            </bind>
+        </in-binding>
+        <out-binding/>
+        <description>Sleep a given number of seconds.</description>
+        <position y="210.0" x="920.0"/>
+    </workflow-item>
+    <workflow-item name="item9" out-name="item8" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="210.0" x="1060.0"/>
+    </workflow-item>
+    <workflow-item name="item10" out-name="item0" type="task" comparator="0">
+        <display-name>Notification</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="110.0" x="1220.0"/>
+    </workflow-item>
+    <workflow-item name="item11" out-name="item3" type="task" comparator="0">
+        <display-name>Create CE Record</display-name>
+        <script encoded="false"></script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="107.5" x="270.0"/>
+    </workflow-item>
+    <workflow-item name="item12" type="end" end-mode="0" comparator="0">
+        <position y="190.0" x="180.0"/>
+    </workflow-item>
+    <workflow-item name="item13" out-name="item12" alt-out-name="item11" type="custom-condition" comparator="0">
+        <display-name>Check if flow is already running on VM</display-name>
+        <script encoded="false">return true;</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="100.0" x="140.0"/>
+    </workflow-item>
+</ns2:workflow>

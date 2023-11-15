@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="7103fff6-f468-441b-a416-c7719e9f91da" editor-version="2.0" version="1.0.1" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Get Certificates Test</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="certificateName" type="string"/>
+    </input>
+    <output/>
+    <attrib name="avivroClient" type="Avi:AviVroClient">
+        <value encoded="n">dunes://service.dunes.ch/CustomSDKObject?id='172.16.26.170-admin'&amp;dunesName='Avi:AviVroClient'</value>
+    </attrib>
+    <attrib name="controller" type="string">
+        <value encoded="n">172.16.26.170-admin</value>
+    </attrib>
+    <workflow-item name="item0" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="50.0" x="580.0"/>
+    </workflow-item>
+    <workflow-item name="item1" out-name="item3" type="task" script-module="com.vmware.avi/getAviVroClient" comparator="0">
+        <display-name>Get vroClient</display-name>
+        <script encoded="false">//Auto generated script, cannot be modified !
+actionResult = System.getModule("com.vmware.avi").getAviVroClient(controller);
+</script>
+        <in-binding>
+            <bind name="controller" type="string" export-name="controller">
+                <description>Controller IP</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="actionResult" type="Avi:AviVroClient" export-name="avivroClient"/>
+        </out-binding>
+        <description>Add a note to the workflow schema.</description>
+        <position y="60.0" x="150.0"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item0" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">//Retrieve the Certificate Object for Input certificate name&#13;
+var response = avivroClient.getObjectDataByName("sslkeyandcertificate",certificateName);&#13;
+System.log(response)&#13;
+var objectData = JSON.parse(response);&#13;
+&#13;
+System.log(objectData);&#13;
+</script>
+        <in-binding>
+            <bind name="avivroClient" type="Avi:AviVroClient" export-name="avivroClient"/>
+            <bind name="certificateName" type="string" export-name="certificateName"/>
+        </in-binding>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="60.0" x="400.0"/>
+    </workflow-item>
+</ns2:workflow>
