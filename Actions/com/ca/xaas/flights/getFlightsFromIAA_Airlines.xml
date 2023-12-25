@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getFlightsFromIAA_Airlines" result-type="Array/string" api-version="6.0.0" id="55d2185e-cf04-4aa5-90ad-e130a5e7ed6c" version="0.0.0" category-name="com.ca.xaas.flights">
+  <param n="dest" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[    var getHosts = RESTHostManager.getHosts()
+
+    for(var restHostId in getHosts)
+    {	
+	    var restHost = RESTHostManager.getHost(getHosts[restHostId])
+	    if(restHost.name == "data.gov.il")
+        {		
+		    MyREST = restHost
+	    }
+    }
+    if(dest)
+    {
+        originaluri = "datastore_search?resource_id=e83f763b-b7d7-479e-b172-ae981ddc6de5&limit=9999&fields=CHOPERD&filters={\"CHLOC1D\":\""+dest+"\"}"
+    }
+    else
+    {
+    originaluri = "datastore_search?resource_id=e83f763b-b7d7-479e-b172-ae981ddc6de5&limit=9999&fields=CHOPERD"
+    }
+    uri = encodeURI(originaluri)
+    var Req = MyREST.createRequest("GET",uri,null);
+    System.log(Req.fullUrl);
+    var Res = Req.execute();
+    var Jreturn = JSON.parse(Res.contentAsString);
+    var airlines = []
+    System.log(JSON.stringify(Jreturn.result.records))
+    for each(make in Jreturn.result.records)
+    {
+        System.log(make.CHOPERD)
+        airlines.push(make.CHOPERD);
+    }
+
+function onlyUnique(value, index, self) {
+return self.indexOf(value) === index;
+}
+airlines = airlines.filter(onlyUnique);
+return airlines.sort();]]></script>
+</dunes-script-module>

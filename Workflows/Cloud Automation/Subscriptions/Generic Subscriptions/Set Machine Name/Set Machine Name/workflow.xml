@@ -36,6 +36,7 @@
 &#13;
 customProperties = inputProperties.get("customProperties");&#13;
 var new_name = customProperties.get("machineName")&#13;
+&#13;
 resourceNames = inputProperties.get("resourceNames");&#13;
 &#13;
 for (var i=0; i&lt; resourceNames.length; i++){ &#13;

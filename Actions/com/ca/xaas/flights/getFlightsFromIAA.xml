@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getFlightsFromIAA" result-type="Array/Properties" api-version="6.0.0" id="40792ac8-56d1-40fb-9207-585f6f87eaab" version="0.0.0" category-name="com.ca.xaas.flights">
+  <param n="airline" t="string"><![CDATA[]]></param>
+  <param n="dest" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[  var Value = [];
+    if((dest == null || dest == "") && (airline == null || airline == ""))
+    {
+        Value.push({"Type":0,"Airline":0,"Airline code":0,"Flight Number":0,"Scheduled time":0,"Updated time":0,"Status":0})
+        return Value
+    }
+
+    
+  
+    var getHosts = RESTHostManager.getHosts()
+
+    for(var restHostId in getHosts){	
+	var restHost = RESTHostManager.getHost(getHosts[restHostId])
+	if(restHost.name == "data.gov.il"){		
+		MyREST = restHost
+	}
+    }
+    if((dest != null || dest != "") && (airline == "" || airline == null))
+    {
+        originaluri = "datastore_search?resource_id=e83f763b-b7d7-479e-b172-ae981ddc6de5&limit=200&filters={\"CHLOC1D\":\""+dest+"\"}"
+    }
+    if((dest != null || dest != "") && (airline != null || airline != null))
+    {
+        originaluri = "datastore_search?resource_id=e83f763b-b7d7-479e-b172-ae981ddc6de5&limit=200&filters={\"CHLOC1D\":\""+dest+"\",\"CHOPERD\":\""+airline+"\"}"
+    }
+    if((dest == null || dest == "") && (airline != null || airline != null))
+    {
+        originaluri = "datastore_search?resource_id=e83f763b-b7d7-479e-b172-ae981ddc6de5&limit=200&filters={\"CHOPERD\":\""+airline+"\"}"
+    }
+
+    uri = encodeURI(originaluri)
+    var Req = MyREST.createRequest("GET",uri,null);
+    System.log(Req.fullUrl);
+    var Res = Req.execute();
+    var Jreturn = JSON.parse(Res.contentAsString);
+    System.log(JSON.stringify(Jreturn.result.records))
+    for each(flight in Jreturn.result.records)
+    {
+        if(flight.CHAORD == "D")
+        {
+            var type = "Departure"
+        }
+        if(flight.CHAORD == "A")
+        {
+            var type = "Arrival"
+        }
+        Value.push({"Type":type,"Airline":flight.CHOPERD,"Airline code":flight.CHOPER,"Flight Number":flight.CHFLTN,"Scheduled time":flight.CHSTOL,"Updated time":flight.CHPTOL,"Status":flight.CHRMINE})
+    }
+    return Value;]]></script>
+</dunes-script-module>

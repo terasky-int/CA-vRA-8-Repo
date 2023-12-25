@@ -1,0 +1,1 @@
+{"schema":{"accept":{"id":"accept","type":{"dataType":"boolean"},"label":"accept","constraints":{"required":false}}},"layout":{"pages":[{"id":"page_yktw8exm","title":"General","sections":[{"id":"section_qray5vbm","fields":[{"id":"accept","display":"checkbox","signpostPosition":"right-middle","state":{"visible":true,"read-only":false}}]}]}]},"itemId":"item2"}

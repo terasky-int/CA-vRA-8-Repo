@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getCarsFromDMVArray" result-type="Array/string" api-version="6.0.0" id="2745ded9-53fb-4734-ae81-088cf202b813" version="0.0.0" category-name="com.ca.xaas.dmv">
+  <param n="LicencePlateNumber" t="string"><![CDATA[]]></param>
+  <script encoded="false"><![CDATA[var Value = [];
+var Error = []; 
+
+try { 
+    
+    if((LicencePlateNumber.length > 6) && (LicencePlateNumber.match(/[0-9]/)) && (LicencePlateNumber.length < 9)) {
+
+        var getHosts = RESTHostManager.getHosts()
+
+        for(var restHostId in getHosts){	
+            var restHost = RESTHostManager.getHost(getHosts[restHostId])
+            if(restHost.name == "data.gov.il"){		
+                MyREST = restHost
+            }   
+        }
+
+        var Req = MyREST.createRequest("GET","datastore_search?resource_id=053cea08-09bc-40ec-8f7a-156f0677aff3&q="+LicencePlateNumber,null);
+        System.log(Req.fullUrl)
+        var Res = Req.execute();
+        System.log(Res.contentAsString);
+        var Jreturn = JSON.parse(Res.contentAsString);
+        //var fileds = Object.keys(Jreturn.result.records[0]);
+
+        Value.push("license Plate Number: "+Jreturn.result.records[0].mispar_rechev.toString());
+        Value.push('----------------------------------------------------')
+        Value.push("Manufacturer: "+Jreturn.result.records[0].tozeret_nm);
+        Value.push('----------------------------------------------------')
+        Value.push("Model: "+Jreturn.result.records[0].kinuy_mishari);
+        Value.push('----------------------------------------------------')
+        Value.push("Engine Type: "+Jreturn.result.records[0].degem_manoa);
+        Value.push('----------------------------------------------------')
+        Value.push("MOT Date: "+Jreturn.result.records[0].mivchan_acharon_dt);
+        Value.push('----------------------------------------------------')
+        Value.push("MOT Vaild until: "+Jreturn.result.records[0].tokef_dt);
+        Value.push('----------------------------------------------------')
+        Value.push("Ownership type: "+Jreturn.result.records[0].baalut);
+        Value.push('----------------------------------------------------')
+        Value.push("Model year: "+Jreturn.result.records[0].shnat_yitzur.toString());
+        Value.push('----------------------------------------------------')
+        Value.push("Color: "+Jreturn.result.records[0].tzeva_rechev);
+        Value.push('----------------------------------------------------')
+        Value.push("Fuel Type: "+Jreturn.result.records[0].sug_delek_nm);
+        Value.push('----------------------------------------------------')
+        Value.push("Trim level "+Jreturn.result.records[0].ramat_gimur);
+
+        return Value;
+
+    } 
+
+} catch (err) { 
+    Error.push('Please enter a valid license number')
+    return Error 
+}]]></script>
+</dunes-script-module>

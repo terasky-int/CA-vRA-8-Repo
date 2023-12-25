@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dunes-script-module name="getFlightsFromIAA_Airport" result-type="Array/string" api-version="6.0.0" id="9fcb4e37-fbde-4773-8d46-d4445dbd0402" version="0.0.0" category-name="com.ca.xaas.flights">
+  <script encoded="false"><![CDATA[    var getHosts = RESTHostManager.getHosts()
+
+    for(var restHostId in getHosts)
+    {	
+	    var restHost = RESTHostManager.getHost(getHosts[restHostId])
+	    if(restHost.name == "data.gov.il")
+        {		
+		    MyREST = restHost
+	    }
+    }
+
+    originaluri = "datastore_search?resource_id=e83f763b-b7d7-479e-b172-ae981ddc6de5&limit=9999&fields=CHLOC1D"
+    uri = encodeURI(originaluri)
+    var Req = MyREST.createRequest("GET",uri,null);
+    System.log(Req.fullUrl);
+    var Res = Req.execute();
+    var Jreturn = JSON.parse(Res.contentAsString);
+    var airlines = []
+    System.log(JSON.stringify(Jreturn.result.records))
+    for each(make in Jreturn.result.records)
+    {
+        System.log(make.CHLOC1D)
+        airlines.push(make.CHLOC1D);
+    }
+
+function onlyUnique(value, index, self) {
+return self.indexOf(value) === index;
+}
+airlines = airlines.filter(onlyUnique);
+return airlines.sort();]]></script>
+</dunes-script-module>
